@@ -1,0 +1,4850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-400 Interview Simulator | 入籍面试模拟器</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #1e40af;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        /* Home Screen */
+        .home-screen {
+            padding: 40px;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .module-card {
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .module-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .module-card.featured {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+
+        .module-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .module-card p {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+
+        .module-card.featured p {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .module-card .count {
+            font-size: 0.8rem;
+            background: var(--gray-200);
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 12px;
+            display: inline-block;
+        }
+
+        .module-card.featured .count {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Settings Panel */
+        .settings-panel {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .settings-panel h3 {
+            font-size: 1rem;
+            margin-bottom: 16px;
+            color: var(--gray-700);
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .setting-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .setting-label {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .setting-options {
+            display: flex;
+            gap: 8px;
+        }
+
+        .setting-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--gray-200);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .setting-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .setting-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Interview Screen */
+        .interview-screen {
+            display: none;
+        }
+
+        .interview-header {
+            background: var(--gray-800);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .interview-header h2 {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .progress-bar {
+            width: 150px;
+            height: 6px;
+            background: var(--gray-600);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s ease;
+        }
+
+        .question-count {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .exit-btn {
+            background: transparent;
+            border: 1px solid var(--gray-500);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .exit-btn:hover {
+            background: var(--gray-700);
+        }
+
+        /* Question Area */
+        .question-area {
+            padding: 40px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .officer-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .speaking-indicator {
+            position: relative;
+        }
+
+        .speaking-indicator.active::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            max-width: 600px;
+            line-height: 1.4;
+            min-height: 60px;
+        }
+
+        .question-chinese {
+            font-size: 1rem;
+            color: var(--gray-500);
+            margin-top: 12px;
+            display: none;
+        }
+
+        .question-chinese.visible {
+            display: block;
+        }
+
+        .audio-controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .audio-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+
+        .audio-btn.secondary {
+            background: var(--gray-200);
+            color: var(--gray-600);
+        }
+
+        .audio-btn.secondary:hover {
+            background: var(--gray-300);
+        }
+
+        /* Answer Area */
+        .answer-area {
+            background: var(--gray-50);
+            padding: 30px 40px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .answer-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .answer-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+        }
+
+        .mic-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: var(--danger);
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mic-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .mic-btn.listening {
+            animation: mic-pulse 1s infinite;
+        }
+
+        @keyframes mic-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(220, 38, 38, 0); }
+        }
+
+        .submit-btn {
+            padding: 16px 32px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .submit-btn:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+        }
+
+        /* Feedback Area */
+        .feedback-area {
+            padding: 30px 40px;
+            display: none;
+        }
+
+        .feedback-area.visible {
+            display: block;
+        }
+
+        .feedback-card {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .feedback-card.correct {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+        }
+
+        .feedback-card.incorrect {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .feedback-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .feedback-card.correct .feedback-icon {
+            background: var(--success);
+            color: white;
+        }
+
+        .feedback-card.incorrect .feedback-icon {
+            background: var(--danger);
+            color: white;
+        }
+
+        .feedback-title {
+            font-weight: 600;
+        }
+
+        .reference-answer {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .reference-answer h4 {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+        }
+
+        .reference-answer p {
+            color: var(--gray-700);
+        }
+
+        .tips-box {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .tips-box h4 {
+            font-size: 0.85rem;
+            color: var(--warning);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tips-box p {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        /* Mastery Buttons */
+        .mastery-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .mastery-btn {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid var(--gray-200);
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .mastery-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .mastery-btn .emoji {
+            font-size: 1.5rem;
+        }
+
+        .mastery-btn.needs-practice:hover {
+            border-color: var(--danger);
+            background: #fef2f2;
+        }
+
+        .mastery-btn.basic:hover {
+            border-color: var(--warning);
+            background: #fffbeb;
+        }
+
+        .mastery-btn.mastered:hover {
+            border-color: var(--success);
+            background: #ecfdf5;
+        }
+
+        /* Progress Screen */
+        .progress-screen {
+            display: none;
+            padding: 40px;
+        }
+
+        .progress-title {
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--gray-50);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .category-progress {
+            margin-top: 24px;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .category-name {
+            font-weight: 500;
+        }
+
+        .category-bar {
+            width: 200px;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .category-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s;
+        }
+
+        .category-percent {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            min-width: 50px;
+            text-align: right;
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .results-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+
+        .results-subtitle {
+            color: var(--gray-500);
+            margin-bottom: 32px;
+        }
+
+        .results-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 32px;
+        }
+
+        .result-stat {
+            text-align: center;
+        }
+
+        .result-stat .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .result-stat .label {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+
+        .result-stat.correct .number {
+            color: var(--success);
+        }
+
+        .result-stat.incorrect .number {
+            color: var(--danger);
+        }
+
+        .restart-btn {
+            padding: 16px 40px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .restart-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Vocabulary Screen */
+        .vocabulary-screen {
+            display: none;
+            padding: 40px;
+        }
+
+        .vocab-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .vocab-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .vocab-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .vocab-category-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--gray-200);
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .vocab-category-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .vocab-category-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .vocab-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .vocab-card {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .vocab-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .vocab-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .vocab-word {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .vocab-pronunciation {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            font-style: italic;
+        }
+
+        .vocab-chinese {
+            font-size: 1rem;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .vocab-definition {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .vocab-example {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            border-left: 3px solid var(--primary);
+        }
+
+        .vocab-tip {
+            margin-top: 12px;
+            padding: 10px;
+            background: #fffbeb;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--warning);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vocab-audio-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .vocab-audio-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .vocab-search {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+
+        .vocab-search:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .vocab-count {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-bottom: 16px;
+        }
+
+        /* Voice Select */
+        .voice-select {
+            padding: 8px 12px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            min-width: 200px;
+            cursor: pointer;
+            background: white;
+        }
+
+        .voice-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Back Button in Interview */
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid var(--gray-500);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--gray-700);
+        }
+
+        .back-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Read All Button */
+        .read-all-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .read-all-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .read-all-btn.playing {
+            background: var(--danger);
+        }
+
+        /* Mini Audio Button for definitions and examples */
+        .mini-audio-btn {
+            background: var(--gray-200);
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-left: 8px;
+            vertical-align: middle;
+            transition: all 0.2s;
+        }
+
+        .mini-audio-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .vocab-definition, .vocab-example {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .vocab-definition span, .vocab-example span {
+            flex: 1;
+        }
+
+        /* Skip Button */
+        .skip-btn {
+            padding: 12px 24px;
+            background: var(--gray-200);
+            color: var(--gray-700);
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .skip-btn:hover {
+            background: var(--gray-300);
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .home-screen {
+                padding: 24px;
+            }
+
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .question-area {
+                padding: 24px;
+            }
+
+            .question-text {
+                font-size: 1.2rem;
+            }
+
+            .answer-area {
+                padding: 20px;
+            }
+
+            .answer-input-container {
+                flex-direction: column;
+            }
+
+            .mastery-buttons {
+                flex-direction: column;
+            }
+
+            .progress-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .category-item {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+
+            .category-bar {
+                width: 100%;
+            }
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Loading state */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🇺🇸 N-400 Interview Simulator</h1>
+            <p>入籍面试模拟器 - 真实对话练习</p>
+        </header>
+
+        <main class="main-card">
+            <!-- Home Screen -->
+            <div class="home-screen" id="homeScreen">
+                <h2 style="font-size: 1.3rem; margin-bottom: 8px;">选择练习模块 Choose Practice Module</h2>
+                <p style="color: var(--gray-500); font-size: 0.9rem;">点击开始练习 Click to start practicing</p>
+
+                <div class="module-grid">
+                    <div class="module-card" onclick="startModule('warmup')">
+                        <h3>👋 热身问题 Warm-up</h3>
+                        <p>面试开场白与基本寒暄</p>
+                        <span class="count">15 questions</span>
+                    </div>
+                    <div class="module-card" onclick="startModule('part2')">
+                        <h3>👤 Part 2: 个人信息</h3>
+                        <p>姓名、生日、地址等基本信息</p>
+                        <span class="count">20 questions</span>
+                    </div>
+                    <div class="module-card" onclick="startModule('part3-9')">
+                        <h3>📋 Part 3-9: 历史信息</h3>
+                        <p>居住、工作、旅行、婚姻、子女</p>
+                        <span class="count">35 questions</span>
+                    </div>
+                    <div class="module-card" onclick="startModule('part12')">
+                        <h3>⚖️ Part 12: 道德品质</h3>
+                        <p>"Have you ever..." 是非题</p>
+                        <span class="count">45 questions</span>
+                    </div>
+                    <div class="module-card" onclick="startModule('oath')">
+                        <h3>🎖️ 效忠誓词 Oath</h3>
+                        <p>宪法支持与效忠宣誓问题</p>
+                        <span class="count">10 questions</span>
+                    </div>
+                    <div class="module-card featured" onclick="startModule('mock')">
+                        <h3>🎯 完整模拟面试</h3>
+                        <p>随机抽取25题，完整模拟真实面试</p>
+                        <span class="count">Mock Interview</span>
+                    </div>
+                    <div class="module-card" onclick="showVocabulary()">
+                        <h3>📚 词汇学习 Vocabulary</h3>
+                        <p>N-400核心词汇与名词解释</p>
+                        <span class="count">100+ words</span>
+                    </div>
+                </div>
+
+                <div class="settings-panel">
+                    <h3>⚙️ 练习设置 Settings</h3>
+
+                    <div class="setting-row">
+                        <span class="setting-label">难度 Difficulty</span>
+                        <div class="setting-options">
+                            <button class="setting-btn" data-setting="difficulty" data-value="easy">入门 Easy</button>
+                            <button class="setting-btn active" data-setting="difficulty" data-value="normal">正常 Normal</button>
+                            <button class="setting-btn" data-setting="difficulty" data-value="hard">挑战 Hard</button>
+                        </div>
+                    </div>
+
+                    <div class="setting-row">
+                        <span class="setting-label">显示中文翻译 Show Chinese</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="showChinese" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-row">
+                        <span class="setting-label">自动播放下一题 Auto-play Next</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="autoNext" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-row">
+                        <span class="setting-label">随机问法变化 Random Phrasings</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="randomPhrasing" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-row">
+                        <span class="setting-label">语音选择 Voice</span>
+                        <select id="voiceSelect" class="voice-select" onchange="changeVoice()">
+                            <option value="">加载中...</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-row">
+                        <span class="setting-label">题目筛选 Filter</span>
+                        <div class="setting-options">
+                            <button class="setting-btn active" data-setting="filter" data-value="all">全部 All</button>
+                            <button class="setting-btn" data-setting="filter" data-value="needs-practice">需复习</button>
+                            <button class="setting-btn" data-setting="filter" data-value="not-mastered">未掌握</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px; text-align: center;">
+                    <button class="setting-btn" onclick="showProgress()" style="padding: 12px 24px;">
+                        📊 查看练习进度 View Progress
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interview Screen -->
+            <div class="interview-screen" id="interviewScreen">
+                <div class="interview-header">
+                    <h2 id="moduleTitle">Part 2: 个人信息</h2>
+                    <div class="progress-info">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="question-count" id="questionCount">1 / 20</span>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="back-btn" id="backBtn" onclick="goBack()" title="上一题">← 上一题</button>
+                        <button class="exit-btn" onclick="exitInterview()">✕ 退出</button>
+                    </div>
+                </div>
+
+                <div class="question-area">
+                    <div class="officer-avatar speaking-indicator" id="officerAvatar">
+                        👮
+                    </div>
+                    <p class="question-text" id="questionText">Loading...</p>
+                    <p class="question-chinese" id="questionChinese">加载中...</p>
+                    <div class="audio-controls">
+                        <button class="audio-btn" id="playBtn" onclick="playQuestion()" title="播放 Play">
+                            🔊
+                        </button>
+                        <button class="audio-btn secondary" id="repeatBtn" onclick="playQuestion()" title="重复 Repeat">
+                            🔁
+                        </button>
+                        <button class="audio-btn secondary" id="slowBtn" onclick="playQuestionSlow()" title="慢速 Slow">
+                            🐢
+                        </button>
+                    </div>
+                </div>
+
+                <div class="answer-area" id="answerArea">
+                    <div class="answer-input-container">
+                        <input type="text" class="answer-input" id="answerInput"
+                               placeholder="输入你的回答 Type your answer..."
+                               onkeypress="if(event.key==='Enter') submitAnswer()">
+                        <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="语音输入 Voice Input">
+                            🎤
+                        </button>
+                        <button class="submit-btn" onclick="submitAnswer()">回答 Answer</button>
+                        <button class="skip-btn" onclick="skipQuestion()">下一题 Next →</button>
+                    </div>
+                </div>
+
+                <div class="feedback-area" id="feedbackArea">
+                    <div class="feedback-card" id="feedbackCard">
+                        <div class="feedback-header">
+                            <div class="feedback-icon" id="feedbackIcon">✓</div>
+                            <span class="feedback-title" id="feedbackTitle">Good!</span>
+                        </div>
+                        <div class="reference-answer">
+                            <h4>📝 参考答案 Reference Answer:</h4>
+                            <p id="referenceAnswer">...</p>
+                        </div>
+                        <div class="tips-box" id="tipsBox">
+                            <h4>💡 小贴士 Tip:</h4>
+                            <p id="tipText">...</p>
+                        </div>
+                    </div>
+
+                    <div class="mastery-buttons">
+                        <button class="mastery-btn needs-practice" onclick="markMastery('needs-practice')">
+                            <span class="emoji">😟</span>
+                            <span>还需练习 Need Practice</span>
+                        </button>
+                        <button class="mastery-btn basic" onclick="markMastery('basic')">
+                            <span class="emoji">😊</span>
+                            <span>基本掌握 Understand</span>
+                        </button>
+                        <button class="mastery-btn mastered" onclick="markMastery('mastered')">
+                            <span class="emoji">💪</span>
+                            <span>完全掌握 Mastered</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Screen -->
+            <div class="progress-screen" id="progressScreen">
+                <h2 class="progress-title">📊 练习进度 Your Progress</h2>
+
+                <div class="progress-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalPracticed">0</div>
+                        <div class="stat-label">已练习 Practiced</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalMastered">0</div>
+                        <div class="stat-label">已掌握 Mastered</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalNeedsPractice">0</div>
+                        <div class="stat-label">需复习 Need Review</div>
+                    </div>
+                </div>
+
+                <div class="category-progress" id="categoryProgress">
+                    <!-- Category items will be generated -->
+                </div>
+
+                <div style="text-align: center; margin-top: 24px;">
+                    <button class="restart-btn" onclick="showHome()">← 返回首页 Back Home</button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results-screen" id="resultsScreen">
+                <div class="results-icon" id="resultsIcon">🎉</div>
+                <h2 class="results-title" id="resultsTitle">练习完成！</h2>
+                <p class="results-subtitle" id="resultsSubtitle">Great job completing this session!</p>
+
+                <div class="results-stats">
+                    <div class="result-stat correct">
+                        <div class="number" id="correctCount">0</div>
+                        <div class="label">正确 Correct</div>
+                    </div>
+                    <div class="result-stat incorrect">
+                        <div class="number" id="incorrectCount">0</div>
+                        <div class="label">需复习 Need Review</div>
+                    </div>
+                </div>
+
+                <button class="restart-btn" onclick="showHome()">← 返回首页 Back Home</button>
+            </div>
+
+            <!-- Vocabulary Screen -->
+            <div class="vocabulary-screen" id="vocabularyScreen">
+                <div class="vocab-header">
+                    <h2>📚 词汇学习 Vocabulary</h2>
+                    <button class="exit-btn" onclick="showHome()" style="background: var(--gray-100); color: var(--gray-700); border: 1px solid var(--gray-300);">
+                        ← 返回 Back
+                    </button>
+                </div>
+
+                <input type="text" class="vocab-search" id="vocabSearch"
+                       placeholder="🔍 搜索词汇 Search vocabulary..."
+                       oninput="filterVocabulary()">
+
+                <div class="vocab-categories" id="vocabCategories">
+                    <button class="vocab-category-btn active" data-category="all" onclick="selectVocabCategory('all')">
+                        全部 All
+                    </button>
+                    <button class="vocab-category-btn" data-category="identity" onclick="selectVocabCategory('identity')">
+                        身份 Identity
+                    </button>
+                    <button class="vocab-category-btn" data-category="residence" onclick="selectVocabCategory('residence')">
+                        居住 Residence
+                    </button>
+                    <button class="vocab-category-btn" data-category="family" onclick="selectVocabCategory('family')">
+                        家庭 Family
+                    </button>
+                    <button class="vocab-category-btn" data-category="employment" onclick="selectVocabCategory('employment')">
+                        工作 Work
+                    </button>
+                    <button class="vocab-category-btn" data-category="immigration" onclick="selectVocabCategory('immigration')">
+                        移民 Immigration
+                    </button>
+                    <button class="vocab-category-btn" data-category="legal" onclick="selectVocabCategory('legal')">
+                        法律 Legal
+                    </button>
+                    <button class="vocab-category-btn" data-category="moralCharacter" onclick="selectVocabCategory('moralCharacter')">
+                        道德 Moral
+                    </button>
+                    <button class="vocab-category-btn" data-category="military" onclick="selectVocabCategory('military')">
+                        军事 Military
+                    </button>
+                    <button class="vocab-category-btn" data-category="oath" onclick="selectVocabCategory('oath')">
+                        誓词 Oath
+                    </button>
+                    <button class="vocab-category-btn" data-category="verbs" onclick="selectVocabCategory('verbs')">
+                        动词 Verbs
+                    </button>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <div class="vocab-count" id="vocabCount">显示 100 个词汇</div>
+                    <button class="read-all-btn" id="readAllBtn" onclick="toggleReadAll()">
+                        🔊 <span id="readAllText">朗读全部</span>
+                    </button>
+                </div>
+
+                <div class="vocab-list" id="vocabList">
+                    <!-- Vocabulary cards will be generated here -->
+                </div>
+            </div>
+        </main>
+
+        <footer style="text-align: center; padding: 20px; color: rgba(255,255,255,0.7); font-size: 0.85rem;">
+            <p>祝你面试顺利！Good luck with your interview! 🍀</p>
+        </footer>
+    </div>
+
+    <script>
+// N-400 Interview Questions Database
+// 每道题包含多种问法变体，模拟真实移民官的不同说话方式
+
+const questionDatabase = {
+    // 热身问题
+    warmup: [
+        {
+            id: "w1",
+            category: "warmup",
+            phrasings: [
+                { text: "How are you today?", style: "formal" },
+                { text: "How are you?", style: "normal" },
+                { text: "How you doing?", style: "casual" }
+            ],
+            chinese: "你今天好吗？",
+            answers: ["I am fine, thank you.", "Good, thank you.", "I'm doing well, thanks."],
+            tip: "保持礼貌和自信，简短回答即可。"
+        },
+        {
+            id: "w2",
+            category: "warmup",
+            phrasings: [
+                { text: "Please follow me.", style: "formal" },
+                { text: "Follow me, please.", style: "normal" },
+                { text: "Come with me.", style: "casual" }
+            ],
+            chinese: "请跟我来。",
+            answers: ["(Follow the officer)", "Okay.", "Sure."],
+            tip: "这是指令，不需要回答，跟着走就可以。"
+        },
+        {
+            id: "w3",
+            category: "warmup",
+            phrasings: [
+                { text: "Please raise your right hand.", style: "formal" },
+                { text: "Raise your right hand.", style: "normal" },
+                { text: "Right hand up.", style: "casual" }
+            ],
+            chinese: "请举起你的右手。",
+            answers: ["(Raise your right hand)"],
+            tip: "这是宣誓前的指令，举起右手准备宣誓。"
+        },
+        {
+            id: "w4",
+            category: "warmup",
+            phrasings: [
+                { text: "Do you swear that all your statements are true?", style: "formal" },
+                { text: "Do you swear to tell the truth?", style: "normal" },
+                { text: "You swear everything is true?", style: "casual" }
+            ],
+            chinese: "你宣誓你的陈述都是真实的吗？",
+            answers: ["Yes, I do.", "Yes.", "I do."],
+            tip: "swear = 宣誓，回答 Yes 或 I do。"
+        },
+        {
+            id: "w5",
+            category: "warmup",
+            phrasings: [
+                { text: "Please have a seat.", style: "formal" },
+                { text: "Sit down, please.", style: "normal" },
+                { text: "Have a seat.", style: "casual" }
+            ],
+            chinese: "请坐。",
+            answers: ["Thank you.", "Thanks."],
+            tip: "礼貌地说声谢谢然后坐下。"
+        },
+        {
+            id: "w6",
+            category: "warmup",
+            phrasings: [
+                { text: "May I see your green card and ID?", style: "formal" },
+                { text: "Can I see your green card?", style: "normal" },
+                { text: "Green card and ID?", style: "casual" }
+            ],
+            chinese: "我可以看看你的绿卡和身份证吗？",
+            answers: ["Here you go.", "Sure, here it is.", "Yes, here."],
+            tip: "把证件递给移民官。"
+        },
+        {
+            id: "w7",
+            category: "warmup",
+            phrasings: [
+                { text: "Why are you here today?", style: "formal" },
+                { text: "Why did you come today?", style: "normal" },
+                { text: "What brings you here?", style: "casual" }
+            ],
+            chinese: "你今天为什么来这里？",
+            answers: ["For my citizenship interview.", "Citizen interview.", "Naturalization interview."],
+            tip: "citizenship interview = 公民面试"
+        },
+        {
+            id: "w8",
+            category: "warmup",
+            phrasings: [
+                { text: "Why do you want to become a U.S. citizen?", style: "formal" },
+                { text: "Why do you want to be a citizen?", style: "normal" },
+                { text: "Why citizenship?", style: "casual" }
+            ],
+            chinese: "你为什么要成为美国公民？",
+            answers: ["I want to vote.", "For freedom.", "To vote and have more rights.", "I love this country."],
+            tip: "常见回答：vote（投票）、freedom（自由）、rights（权利）"
+        },
+        {
+            id: "w9",
+            category: "warmup",
+            phrasings: [
+                { text: "How did you get here today?", style: "formal" },
+                { text: "How did you come here?", style: "normal" },
+                { text: "How'd you get here?", style: "casual" }
+            ],
+            chinese: "你今天怎么来的？",
+            answers: ["I drove here.", "By car.", "My spouse drove me.", "I took an Uber."],
+            tip: "这是问你的交通方式，不是问你怎么来美国的。"
+        },
+        {
+            id: "w10",
+            category: "warmup",
+            phrasings: [
+                { text: "Are you ready for your interview?", style: "formal" },
+                { text: "Are you ready?", style: "normal" },
+                { text: "Ready?", style: "casual" }
+            ],
+            chinese: "你准备好面试了吗？",
+            answers: ["Yes, I am.", "Yes.", "I'm ready."],
+            tip: "自信地回答 Yes!"
+        },
+        {
+            id: "w11",
+            category: "warmup",
+            phrasings: [
+                { text: "Is your application current and up-to-date?", style: "formal" },
+                { text: "Is everything on your application still correct?", style: "normal" },
+                { text: "Anything changed on your application?", style: "casual" }
+            ],
+            chinese: "你的申请表内容都是最新的吗？",
+            answers: ["Yes, it is.", "Yes.", "Everything is current."],
+            tip: "如果有变化要说 No, I have some changes."
+        },
+        {
+            id: "w12",
+            category: "warmup",
+            phrasings: [
+                { text: "Do you have any changes, additions, or corrections to make?", style: "formal" },
+                { text: "Any changes to your application?", style: "normal" },
+                { text: "Anything to update?", style: "casual" }
+            ],
+            chinese: "你有任何改变、添加或更正吗？",
+            answers: ["No, I don't.", "No.", "No changes."],
+            tip: "如果有变化，要如实说明。"
+        },
+        {
+            id: "w13",
+            category: "warmup",
+            phrasings: [
+                { text: "Do you understand me?", style: "formal" },
+                { text: "Do you understand?", style: "normal" },
+                { text: "Understand?", style: "casual" }
+            ],
+            chinese: "你明白吗？",
+            answers: ["Yes, I understand.", "Yes.", "I do."],
+            tip: "如果没听懂，可以说 Can you repeat that, please?"
+        },
+        {
+            id: "w14",
+            category: "warmup",
+            phrasings: [
+                { text: "How long have you been studying for this interview?", style: "formal" },
+                { text: "How long did you study?", style: "normal" },
+                { text: "How long you study?", style: "casual" }
+            ],
+            chinese: "你学习了多久？",
+            answers: ["About six months.", "A few months.", "A long time."],
+            tip: "简单回答学习的时长即可。"
+        },
+        {
+            id: "w15",
+            category: "warmup",
+            phrasings: [
+                { text: "Is this your first interview?", style: "formal" },
+                { text: "First time interviewing?", style: "normal" },
+                { text: "First interview?", style: "casual" }
+            ],
+            chinese: "这是你第一次面试吗？",
+            answers: ["Yes, this is my first interview.", "No, this is my second interview."],
+            tip: "如实回答。如果不是第一次，可能会问上次为什么没通过。"
+        }
+    ],
+
+    // Part 2: 个人基本信息
+    part2: [
+        {
+            id: "p2-1",
+            category: "part2",
+            phrasings: [
+                { text: "What is your full legal name?", style: "formal" },
+                { text: "Please state your full name.", style: "normal" },
+                { text: "Your name?", style: "casual" },
+                { text: "Full name?", style: "casual" }
+            ],
+            chinese: "你的法定全名是什么？",
+            answers: ["My name is [Your Full Name].", "My full legal name is [Your Full Name]."],
+            tip: "按照绿卡上的顺序说：First Name, Last Name"
+        },
+        {
+            id: "p2-2",
+            category: "part2",
+            phrasings: [
+                { text: "How do you spell your name?", style: "formal" },
+                { text: "Can you spell your name?", style: "normal" },
+                { text: "Spell your name.", style: "casual" }
+            ],
+            chinese: "你的名字怎么拼写？",
+            answers: ["Z-H-I-M-E-N-G F-A-N"],
+            tip: "一个字母一个字母地拼出来。"
+        },
+        {
+            id: "p2-3",
+            category: "part2",
+            phrasings: [
+                { text: "Have you used any other names since birth?", style: "formal" },
+                { text: "Any other names?", style: "normal" },
+                { text: "Other names?", style: "casual" }
+            ],
+            chinese: "你从出生以来用过其他名字吗？",
+            answers: ["No, I have not.", "No.", "Yes, my nickname is [Name]."],
+            tip: "包括昵称、婚前姓等。"
+        },
+        {
+            id: "p2-4",
+            category: "part2",
+            phrasings: [
+                { text: "Do you have a middle name?", style: "formal" },
+                { text: "Middle name?", style: "normal" },
+                { text: "Any middle name?", style: "casual" }
+            ],
+            chinese: "你有中间名吗？",
+            answers: ["No, I don't have a middle name.", "No.", "Yes, my middle name is [Name]."],
+            tip: "中国人通常没有中间名，回答 No。"
+        },
+        {
+            id: "p2-5",
+            category: "part2",
+            phrasings: [
+                { text: "Do you want to legally change your name?", style: "formal" },
+                { text: "Want to change your name?", style: "normal" },
+                { text: "Changing your name?", style: "casual" }
+            ],
+            chinese: "你想合法更改你的名字吗？",
+            answers: ["No, I don't.", "Yes, I want to change my first name to Kevin."],
+            tip: "如果想改名字，要在入籍时说明。"
+        },
+        {
+            id: "p2-6",
+            category: "part2",
+            phrasings: [
+                { text: "What is your A-Number?", style: "formal" },
+                { text: "What's your Alien number?", style: "normal" },
+                { text: "A-Number?", style: "casual" }
+            ],
+            chinese: "你的A号码是什么？",
+            answers: ["My A-Number is 215571545."],
+            tip: "A-Number 在绿卡上，以 A- 开头的9位数字。"
+        },
+        {
+            id: "p2-7",
+            category: "part2",
+            phrasings: [
+                { text: "What is your date of birth?", style: "formal" },
+                { text: "When were you born?", style: "normal" },
+                { text: "Birthday?", style: "casual" },
+                { text: "Date of birth?", style: "casual" }
+            ],
+            chinese: "你的出生日期是什么？",
+            answers: ["October twenty-fifth, nineteen eighty-one.", "October 25, 1981."],
+            tip: "用英文说日期：月/日/年。避免只说数字。"
+        },
+        {
+            id: "p2-8",
+            category: "part2",
+            phrasings: [
+                { text: "How old are you?", style: "formal" },
+                { text: "What is your age?", style: "normal" },
+                { text: "Your age?", style: "casual" }
+            ],
+            chinese: "你多大了？",
+            answers: ["I am [XX] years old."],
+            tip: "说你现在的年龄。"
+        },
+        {
+            id: "p2-9",
+            category: "part2",
+            phrasings: [
+                { text: "Where were you born?", style: "formal" },
+                { text: "What country were you born in?", style: "normal" },
+                { text: "Country of birth?", style: "casual" }
+            ],
+            chinese: "你在哪里出生？",
+            answers: ["I was born in China.", "China."],
+            tip: "说国家名称即可。"
+        },
+        {
+            id: "p2-10",
+            category: "part2",
+            phrasings: [
+                { text: "What is your nationality?", style: "formal" },
+                { text: "What country are you from?", style: "normal" },
+                { text: "Nationality?", style: "casual" }
+            ],
+            chinese: "你的国籍是什么？",
+            answers: ["China.", "Chinese.", "I am from China."],
+            tip: "nationality = 国籍"
+        },
+        {
+            id: "p2-11",
+            category: "part2",
+            phrasings: [
+                { text: "When did you become a permanent resident?", style: "formal" },
+                { text: "When did you get your green card?", style: "normal" },
+                { text: "Green card date?", style: "casual" }
+            ],
+            chinese: "你什么时候成为永久居民的？",
+            answers: ["April twenty-seventh, twenty twenty.", "April 27, 2020."],
+            tip: "看绿卡上的日期。"
+        },
+        {
+            id: "p2-12",
+            category: "part2",
+            phrasings: [
+                { text: "What is your current physical address?", style: "formal" },
+                { text: "Where do you live?", style: "normal" },
+                { text: "Home address?", style: "casual" },
+                { text: "Address?", style: "casual" }
+            ],
+            chinese: "你现在住在哪里？",
+            answers: ["20751 E Rim Lane, Walnut, California, 91789."],
+            tip: "完整地址：门牌号+街名+城市+州+邮编"
+        },
+        {
+            id: "p2-13",
+            category: "part2",
+            phrasings: [
+                { text: "How long have you lived at this address?", style: "formal" },
+                { text: "How long have you lived there?", style: "normal" },
+                { text: "How long at this address?", style: "casual" }
+            ],
+            chinese: "你在这个地址住了多久？",
+            answers: ["Since February 2021.", "About [X] years."],
+            tip: "计算从搬入日期到现在。"
+        },
+        {
+            id: "p2-14",
+            category: "part2",
+            phrasings: [
+                { text: "Where else have you lived in the last 5 years?", style: "formal" },
+                { text: "Any other addresses in the past 5 years?", style: "normal" },
+                { text: "Previous address?", style: "casual" }
+            ],
+            chinese: "过去5年你还住过哪里？",
+            answers: ["1427 Fairlance Drive, Walnut, California."],
+            tip: "列出过去5年内住过的其他地址。"
+        },
+        {
+            id: "p2-15",
+            category: "part2",
+            phrasings: [
+                { text: "Are you Hispanic or Latino?", style: "formal" },
+                { text: "Hispanic or Latino?", style: "normal" },
+                { text: "Ethnicity?", style: "casual" }
+            ],
+            chinese: "你是西班牙裔或拉丁裔吗？",
+            answers: ["No, I am not Hispanic or Latino."],
+            tip: "Ethnicity = 族裔。中国人回答 No。"
+        },
+        {
+            id: "p2-16",
+            category: "part2",
+            phrasings: [
+                { text: "What is your race?", style: "formal" },
+                { text: "Race?", style: "normal" }
+            ],
+            chinese: "你的种族是什么？",
+            answers: ["Asian.", "I am Asian."],
+            tip: "Race = 种族。中国人选 Asian。"
+        },
+        {
+            id: "p2-17",
+            category: "part2",
+            phrasings: [
+                { text: "How tall are you?", style: "formal" },
+                { text: "What is your height?", style: "normal" },
+                { text: "Height?", style: "casual" }
+            ],
+            chinese: "你多高？",
+            answers: ["Five feet seven inches.", "Five seven."],
+            tip: "美国用英尺和英寸。5'7\" = 5 feet 7 inches"
+        },
+        {
+            id: "p2-18",
+            category: "part2",
+            phrasings: [
+                { text: "How much do you weigh?", style: "formal" },
+                { text: "What is your weight?", style: "normal" },
+                { text: "Weight?", style: "casual" }
+            ],
+            chinese: "你体重多少？",
+            answers: ["One hundred seventy-eight pounds.", "178 pounds."],
+            tip: "美国用磅(pounds/lbs)。"
+        },
+        {
+            id: "p2-19",
+            category: "part2",
+            phrasings: [
+                { text: "What is your phone number?", style: "formal" },
+                { text: "Phone number?", style: "normal" }
+            ],
+            chinese: "你的电话号码是什么？",
+            answers: ["626-606-3969."],
+            tip: "分组念数字。"
+        },
+        {
+            id: "p2-20",
+            category: "part2",
+            phrasings: [
+                { text: "What is your email address?", style: "formal" },
+                { text: "Email?", style: "casual" }
+            ],
+            chinese: "你的电子邮箱是什么？",
+            answers: ["zmfpower at gmail dot com."],
+            tip: "@ 读作 at，. 读作 dot"
+        }
+    ],
+
+    // Part 3-9: 历史信息（居住、工作、旅行、婚姻、子女等）
+    "part3-9": [
+        {
+            id: "p3-1",
+            category: "part3-9",
+            phrasings: [
+                { text: "Is your mother a U.S. citizen?", style: "formal" },
+                { text: "Is your mom a citizen?", style: "normal" },
+                { text: "Mother citizen?", style: "casual" }
+            ],
+            chinese: "你母亲是美国公民吗？",
+            answers: ["No, she is not.", "No."],
+            tip: "如果父母是美国公民，你可能已经是公民了。"
+        },
+        {
+            id: "p3-2",
+            category: "part3-9",
+            phrasings: [
+                { text: "Is your father a U.S. citizen?", style: "formal" },
+                { text: "Is your dad a citizen?", style: "normal" },
+                { text: "Father citizen?", style: "casual" }
+            ],
+            chinese: "你父亲是美国公民吗？",
+            answers: ["No, he is not.", "No."],
+            tip: "如实回答。"
+        },
+        {
+            id: "p3-3",
+            category: "part3-9",
+            phrasings: [
+                { text: "What is your current occupation?", style: "formal" },
+                { text: "What do you do for work?", style: "normal" },
+                { text: "What's your job?", style: "casual" },
+                { text: "Occupation?", style: "casual" }
+            ],
+            chinese: "你现在的职业是什么？",
+            answers: ["I am a Life Insurance Broker.", "Life Insurance Broker."],
+            tip: "说你的职位名称。"
+        },
+        {
+            id: "p3-4",
+            category: "part3-9",
+            phrasings: [
+                { text: "Where do you work?", style: "formal" },
+                { text: "What company do you work for?", style: "normal" },
+                { text: "Employer?", style: "casual" }
+            ],
+            chinese: "你在哪里工作？",
+            answers: ["Premier Financial Alliance.", "I work at Premier Financial Alliance."],
+            tip: "说公司名称。"
+        },
+        {
+            id: "p3-5",
+            category: "part3-9",
+            phrasings: [
+                { text: "When did you start working there?", style: "formal" },
+                { text: "How long have you worked there?", style: "normal" },
+                { text: "Start date?", style: "casual" }
+            ],
+            chinese: "你什么时候开始在那里工作的？",
+            answers: ["July 2022.", "Since July fifth, twenty twenty-two."],
+            tip: "提供开始工作的日期。"
+        },
+        {
+            id: "p3-6",
+            category: "part3-9",
+            phrasings: [
+                { text: "What did you do before this job?", style: "formal" },
+                { text: "Previous job?", style: "normal" },
+                { text: "Job before this?", style: "casual" }
+            ],
+            chinese: "这份工作之前你做什么？",
+            answers: ["I worked at Crest Synergy Inc in Bothell, Washington.", "Wholesale and retail."],
+            tip: "说之前的工作和公司。"
+        },
+        {
+            id: "p3-7",
+            category: "part3-9",
+            phrasings: [
+                { text: "What is your current marital status?", style: "formal" },
+                { text: "Are you married?", style: "normal" },
+                { text: "Marital status?", style: "casual" },
+                { text: "Married?", style: "casual" }
+            ],
+            chinese: "你目前的婚姻状况是什么？",
+            answers: ["I am married.", "Married."],
+            tip: "Single单身/Married已婚/Divorced离婚/Widowed丧偶"
+        },
+        {
+            id: "p3-8",
+            category: "part3-9",
+            phrasings: [
+                { text: "How many times have you been married?", style: "formal" },
+                { text: "How many marriages?", style: "normal" },
+                { text: "Times married?", style: "casual" }
+            ],
+            chinese: "你结过几次婚？",
+            answers: ["One time.", "Once.", "This is my first marriage."],
+            tip: "Once=一次, Twice=两次"
+        },
+        {
+            id: "p3-9",
+            category: "part3-9",
+            phrasings: [
+                { text: "When did you get married?", style: "formal" },
+                { text: "What is your wedding date?", style: "normal" },
+                { text: "Marriage date?", style: "casual" }
+            ],
+            chinese: "你什么时候结婚的？",
+            answers: ["July fourth, twenty fourteen.", "July 4, 2014."],
+            tip: "记住你的结婚日期。"
+        },
+        {
+            id: "p3-10",
+            category: "part3-9",
+            phrasings: [
+                { text: "What is your spouse's full name?", style: "formal" },
+                { text: "What is your husband's/wife's name?", style: "normal" },
+                { text: "Spouse's name?", style: "casual" }
+            ],
+            chinese: "你配偶的全名是什么？",
+            answers: ["[Spouse's Full Name]."],
+            tip: "spouse = 配偶（丈夫或妻子）"
+        },
+        {
+            id: "p3-11",
+            category: "part3-9",
+            phrasings: [
+                { text: "Is your spouse a U.S. citizen?", style: "formal" },
+                { text: "Is your husband/wife a citizen?", style: "normal" },
+                { text: "Spouse citizen?", style: "casual" }
+            ],
+            chinese: "你的配偶是美国公民吗？",
+            answers: ["Yes, she/he is.", "Yes.", "No, she/he is a permanent resident."],
+            tip: "如实回答。"
+        },
+        {
+            id: "p3-12",
+            category: "part3-9",
+            phrasings: [
+                { text: "Is your spouse a member of the U.S. armed forces?", style: "formal" },
+                { text: "Is your spouse in the military?", style: "normal" },
+                { text: "Spouse military?", style: "casual" }
+            ],
+            chinese: "你的配偶是美国军队成员吗？",
+            answers: ["No.", "No, she/he is not."],
+            tip: "armed forces = 军队"
+        },
+        {
+            id: "p3-13",
+            category: "part3-9",
+            phrasings: [
+                { text: "Do you have any children?", style: "formal" },
+                { text: "How many children do you have?", style: "normal" },
+                { text: "Any kids?", style: "casual" },
+                { text: "Children?", style: "casual" }
+            ],
+            chinese: "你有孩子吗？",
+            answers: ["Yes, I have two children.", "Two children."],
+            tip: "children = kids = 孩子"
+        },
+        {
+            id: "p3-14",
+            category: "part3-9",
+            phrasings: [
+                { text: "What are your children's names?", style: "formal" },
+                { text: "Children's names?", style: "normal" }
+            ],
+            chinese: "你孩子的名字是什么？",
+            answers: ["Xingchuan Fan and Yining Fan."],
+            tip: "说出所有孩子的名字。"
+        },
+        {
+            id: "p3-15",
+            category: "part3-9",
+            phrasings: [
+                { text: "What are your children's dates of birth?", style: "formal" },
+                { text: "When were your children born?", style: "normal" },
+                { text: "Children's birthdays?", style: "casual" }
+            ],
+            chinese: "你孩子的出生日期是什么？",
+            answers: ["July twenty-fourth, twenty eleven and June twelfth, twenty oh-nine."],
+            tip: "记住每个孩子的生日。"
+        },
+        {
+            id: "p3-16",
+            category: "part3-9",
+            phrasings: [
+                { text: "Are they your biological children?", style: "formal" },
+                { text: "Are they your natural children?", style: "normal" },
+                { text: "Biological?", style: "casual" }
+            ],
+            chinese: "他们是你的亲生孩子吗？",
+            answers: ["Yes, they are my biological children.", "Yes."],
+            tip: "biological = 亲生的"
+        },
+        {
+            id: "p3-17",
+            category: "part3-9",
+            phrasings: [
+                { text: "Do your children live with you?", style: "formal" },
+                { text: "Where do your children live?", style: "normal" },
+                { text: "Kids live with you?", style: "casual" }
+            ],
+            chinese: "你的孩子和你住一起吗？",
+            answers: ["Yes, they live with me.", "Yes."],
+            tip: "如实回答。"
+        },
+        {
+            id: "p3-18",
+            category: "part3-9",
+            phrasings: [
+                { text: "Do you provide support for your children?", style: "formal" },
+                { text: "Do you support your children?", style: "normal" },
+                { text: "Support them?", style: "casual" }
+            ],
+            chinese: "你抚养你的孩子吗？",
+            answers: ["Yes, I do.", "Yes."],
+            tip: "support = 经济上支持/抚养"
+        },
+        {
+            id: "p3-19",
+            category: "part3-9",
+            phrasings: [
+                { text: "How did you get your U.S. permanent resident card?", style: "formal" },
+                { text: "How did you get your green card?", style: "normal" },
+                { text: "How'd you get your green card?", style: "casual" }
+            ],
+            chinese: "你是怎么获得绿卡的？",
+            answers: ["By asylum.", "Through political asylum."],
+            tip: "asylum = 庇护（读音：饿塞冷）"
+        },
+        {
+            id: "p3-20",
+            category: "part3-9",
+            phrasings: [
+                { text: "What kind of asylum?", style: "formal" },
+                { text: "What type of asylum?", style: "normal" },
+                { text: "Asylum type?", style: "casual" }
+            ],
+            chinese: "什么类型的庇护？",
+            answers: ["Political asylum.", "I joined some events against the Chinese government."],
+            tip: "political asylum = 政治庇护"
+        },
+        {
+            id: "p3-21",
+            category: "part3-9",
+            phrasings: [
+                { text: "How did you enter the United States?", style: "formal" },
+                { text: "How did you come to the U.S.?", style: "normal" },
+                { text: "How'd you enter?", style: "casual" }
+            ],
+            chinese: "你是怎么进入美国的？",
+            answers: ["With a tourism visa.", "Tourist visa."],
+            tip: "说你入境时使用的签证类型。"
+        },
+        {
+            id: "p3-22",
+            category: "part3-9",
+            phrasings: [
+                { text: "When did you enter the United States?", style: "formal" },
+                { text: "When did you come to America?", style: "normal" },
+                { text: "Entry date?", style: "casual" }
+            ],
+            chinese: "你什么时候进入美国的？",
+            answers: ["May sixteenth, twenty seventeen.", "May 16, 2017."],
+            tip: "记住你第一次入境美国的日期。"
+        },
+        {
+            id: "p3-23",
+            category: "part3-9",
+            phrasings: [
+                { text: "Which port of entry did you use?", style: "formal" },
+                { text: "Where did you enter the U.S.?", style: "normal" },
+                { text: "Port of entry?", style: "casual" }
+            ],
+            chinese: "你从哪个入境口岸进入美国？",
+            answers: ["Los Angeles.", "LAX airport."],
+            tip: "port of entry = 入境口岸（机场或边境）"
+        },
+        {
+            id: "p3-24",
+            category: "part3-9",
+            phrasings: [
+                { text: "How many trips have you taken outside the United States in the last 5 years?", style: "formal" },
+                { text: "How many times did you leave the U.S. in the past 5 years?", style: "normal" },
+                { text: "Trips outside U.S.?", style: "casual" }
+            ],
+            chinese: "过去5年你离开美国几次？",
+            answers: ["Zero times.", "None.", "I haven't left the U.S."],
+            tip: "如实回答出境次数。"
+        },
+        {
+            id: "p3-25",
+            category: "part3-9",
+            phrasings: [
+                { text: "Have you taken any trips longer than 6 months?", style: "formal" },
+                { text: "Any trips over 6 months?", style: "normal" },
+                { text: "Trips over 6 months?", style: "casual" }
+            ],
+            chinese: "你有超过6个月的旅行吗？",
+            answers: ["No.", "No, I haven't."],
+            tip: "超过6个月可能影响居住连续性。"
+        },
+        {
+            id: "p3-26",
+            category: "part3-9",
+            phrasings: [
+                { text: "Do you have an older passport?", style: "formal" },
+                { text: "Previous passport?", style: "normal" },
+                { text: "Old passport?", style: "casual" }
+            ],
+            chinese: "你有旧护照吗？",
+            answers: ["Yes, I do.", "No, I don't."],
+            tip: "如果有过期的护照，也要带去面试。"
+        },
+        {
+            id: "p3-27",
+            category: "part3-9",
+            phrasings: [
+                { text: "Do you have a Refugee Travel Document?", style: "formal" },
+                { text: "Travel document?", style: "normal" }
+            ],
+            chinese: "你有难民旅行证件吗？",
+            answers: ["Yes, I do.", "No, I don't."],
+            tip: "庇护者通常有这个文件。"
+        },
+        {
+            id: "p3-28",
+            category: "part3-9",
+            phrasings: [
+                { text: "How do you support yourself?", style: "formal" },
+                { text: "How do you make a living?", style: "normal" },
+                { text: "Income source?", style: "casual" }
+            ],
+            chinese: "你如何维持生活？",
+            answers: ["I work as a life insurance broker.", "By working."],
+            tip: "说你的工作或收入来源。"
+        },
+        {
+            id: "p3-29",
+            category: "part3-9",
+            phrasings: [
+                { text: "Do you go to school now?", style: "formal" },
+                { text: "Are you currently studying?", style: "normal" },
+                { text: "Student?", style: "casual" }
+            ],
+            chinese: "你现在上学吗？",
+            answers: ["No, I don't.", "No."],
+            tip: "如实回答。"
+        },
+        {
+            id: "p3-30",
+            category: "part3-9",
+            phrasings: [
+                { text: "What did you do in your country before coming to the U.S.?", style: "formal" },
+                { text: "What was your job in China?", style: "normal" },
+                { text: "Job before U.S.?", style: "casual" }
+            ],
+            chinese: "来美国之前你在你的国家做什么？",
+            answers: ["I was a [your previous job]."],
+            tip: "说你在中国的职业。"
+        },
+        {
+            id: "p3-31",
+            category: "part3-9",
+            phrasings: [
+                { text: "Do you bring your marriage certificate?", style: "formal" },
+                { text: "Marriage certificate?", style: "normal" }
+            ],
+            chinese: "你带了结婚证吗？",
+            answers: ["Yes, here it is.", "Yes."],
+            tip: "面试要带结婚证原件。"
+        },
+        {
+            id: "p3-32",
+            category: "part3-9",
+            phrasings: [
+                { text: "Do you bring your tax returns?", style: "formal" },
+                { text: "Tax returns?", style: "normal" },
+                { text: "Taxes?", style: "casual" }
+            ],
+            chinese: "你带了报税单吗？",
+            answers: ["Yes, here they are.", "Yes, I have my tax returns."],
+            tip: "带近5年的报税记录。"
+        },
+        {
+            id: "p3-33",
+            category: "part3-9",
+            phrasings: [
+                { text: "Did you work at another job at the same time?", style: "formal" },
+                { text: "Any other job at the same time?", style: "normal" },
+                { text: "Other job same time?", style: "casual" }
+            ],
+            chinese: "你同时做过其他工作吗？",
+            answers: ["No.", "Yes, I also worked at [Company]."],
+            tip: "如果有兼职或副业要说明。"
+        },
+        {
+            id: "p3-34",
+            category: "part3-9",
+            phrasings: [
+                { text: "How often do you go to your Chinese democracy events?", style: "formal" },
+                { text: "How often do you attend democracy meetings?", style: "normal" }
+            ],
+            chinese: "你多久参加一次中国民主活动？",
+            answers: ["A few times a year.", "Not very often now."],
+            tip: "如果通过民主活动获得庇护，要准备这个问题。"
+        },
+        {
+            id: "p3-35",
+            category: "part3-9",
+            phrasings: [
+                { text: "Do you attend in person or online?", style: "formal" },
+                { text: "In person or online?", style: "normal" }
+            ],
+            chinese: "你亲自参加还是在线参加？",
+            answers: ["Both.", "Locally, in person.", "Online mostly."],
+            tip: "如实回答参与方式。"
+        }
+    ],
+
+    // Part 12: 道德品质问题 "Have you ever..."
+    part12: [
+        {
+            id: "p12-1",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever claimed to be a U.S. citizen?", style: "formal" },
+                { text: "Ever claimed to be a citizen?", style: "normal" },
+                { text: "Claimed citizen?", style: "casual" }
+            ],
+            chinese: "你曾经声称自己是美国公民吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["claimed", "U.S. citizen"],
+            tip: "claimed = 声称。在成为公民之前不能说自己是公民。"
+        },
+        {
+            id: "p12-2",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever registered to vote in any election in the United States?", style: "formal" },
+                { text: "Have you ever voted in the U.S.?", style: "normal" },
+                { text: "Ever voted?", style: "casual" },
+                { text: "Vote?", style: "casual" }
+            ],
+            chinese: "你曾经在美国登记投票或投票吗？",
+            answers: ["No, I have never voted.", "No."],
+            keywords: ["registered", "vote"],
+            tip: "绿卡持有者不能投票，投票是公民的权利。"
+        },
+        {
+            id: "p12-3",
+            category: "part12",
+            phrasings: [
+                { text: "Do you currently owe any overdue Federal, state, or local taxes?", style: "formal" },
+                { text: "Do you owe any taxes?", style: "normal" },
+                { text: "Owe taxes?", style: "casual" }
+            ],
+            chinese: "你目前是否拖欠任何联邦、州或地方税？",
+            answers: ["No, I don't owe any taxes.", "No."],
+            keywords: ["owe", "taxes", "overdue"],
+            tip: "owe = 欠。确保按时报税和缴税。"
+        },
+        {
+            id: "p12-4",
+            category: "part12",
+            phrasings: [
+                { text: "Do you always file your taxes?", style: "formal" },
+                { text: "Do you file taxes every year?", style: "normal" },
+                { text: "File taxes?", style: "casual" }
+            ],
+            chinese: "你每年都报税吗？",
+            answers: ["Yes, I always file my taxes on time.", "Yes."],
+            keywords: ["file", "taxes"],
+            tip: "file = 申报。确保每年按时报税。"
+        },
+        {
+            id: "p12-5",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever called yourself a nonresident on a tax return?", style: "formal" },
+                { text: "Ever claimed to be a nonresident on taxes?", style: "normal" },
+                { text: "Called yourself nonresident?", style: "casual" }
+            ],
+            chinese: "你曾经在报税表上称自己为非居民吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["nonresident", "tax return"],
+            tip: "nonresident = 非居民。绿卡持有者是居民。"
+        },
+        {
+            id: "p12-6",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever been a member of the Communist Party?", style: "formal" },
+                { text: "Were you ever in the Communist Party?", style: "normal" },
+                { text: "Communist Party member?", style: "casual" }
+            ],
+            chinese: "你曾经是共产党员吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["member", "Communist Party"],
+            tip: "Communist Party = 共产党（如中国、古巴的执政党）"
+        },
+        {
+            id: "p12-7",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever been a member of a totalitarian party?", style: "formal" },
+                { text: "Ever in a totalitarian party?", style: "normal" },
+                { text: "Totalitarian party?", style: "casual" }
+            ],
+            chinese: "你曾经是极权主义政党成员吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["totalitarian", "party"],
+            tip: "totalitarian = 极权主义（一党专政，没有自由）"
+        },
+        {
+            id: "p12-8",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever advocated the overthrow of any government by force?", style: "formal" },
+                { text: "Ever supported overthrowing a government?", style: "normal" },
+                { text: "Overthrow government?", style: "casual" }
+            ],
+            chinese: "你曾经主张用武力推翻任何政府吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["advocated", "overthrow"],
+            tip: "overthrow = 推翻。advocated = 主张/支持"
+        },
+        {
+            id: "p12-9",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever persecuted any person?", style: "formal" },
+                { text: "Ever persecuted anyone?", style: "normal" },
+                { text: "Persecuted?", style: "casual" }
+            ],
+            chinese: "你曾经迫害过任何人吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["persecuted"],
+            tip: "persecuted = 迫害（因为种族、宗教等伤害别人）"
+        },
+        {
+            id: "p12-10",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever participated in genocide?", style: "formal" },
+                { text: "Ever involved in genocide?", style: "normal" },
+                { text: "Genocide?", style: "casual" }
+            ],
+            chinese: "你曾经参与种族灭绝吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["genocide"],
+            tip: "genocide = 种族灭绝（大规模屠杀某一种族的人）"
+        },
+        {
+            id: "p12-11",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever participated in torture?", style: "formal" },
+                { text: "Ever tortured anyone?", style: "normal" },
+                { text: "Torture?", style: "casual" }
+            ],
+            chinese: "你曾经参与酷刑吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["torture"],
+            tip: "torture = 酷刑/折磨（让人严重痛苦）"
+        },
+        {
+            id: "p12-12",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever killed or tried to kill anyone?", style: "formal" },
+                { text: "Ever killed anyone?", style: "normal" },
+                { text: "Kill?", style: "casual" }
+            ],
+            chinese: "你曾经杀害或试图杀害任何人吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["killed", "kill"],
+            tip: "kill = 杀害"
+        },
+        {
+            id: "p12-13",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever intentionally injured anyone?", style: "formal" },
+                { text: "Ever hurt anyone seriously?", style: "normal" },
+                { text: "Injure?", style: "casual" }
+            ],
+            chinese: "你曾经故意伤害任何人吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["injured", "injure"],
+            tip: "injure = 伤害"
+        },
+        {
+            id: "p12-14",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever served in any military unit?", style: "formal" },
+                { text: "Were you ever in the military?", style: "normal" },
+                { text: "Military?", style: "casual" }
+            ],
+            chinese: "你曾经在任何军事单位服役吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["military", "served"],
+            tip: "military = 军队"
+        },
+        {
+            id: "p12-15",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever served in a police unit?", style: "formal" },
+                { text: "Were you ever a police officer?", style: "normal" },
+                { text: "Police?", style: "casual" }
+            ],
+            chinese: "你曾经在警察单位服役吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["police"],
+            tip: "包括任何国家的警察。"
+        },
+        {
+            id: "p12-16",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever been a member of a paramilitary group?", style: "formal" },
+                { text: "Ever in a paramilitary unit?", style: "normal" },
+                { text: "Paramilitary?", style: "casual" }
+            ],
+            chinese: "你曾经是准军事组织成员吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["paramilitary"],
+            tip: "paramilitary = 准军事组织（像军队但非官方）"
+        },
+        {
+            id: "p12-17",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever been a member of a rebel group?", style: "formal" },
+                { text: "Ever in a rebel group?", style: "normal" },
+                { text: "Rebel group?", style: "casual" }
+            ],
+            chinese: "你曾经是叛军组织成员吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["rebel"],
+            tip: "rebel group = 叛军（反抗政府的武装组织）"
+        },
+        {
+            id: "p12-18",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever been a member of a guerrilla group?", style: "formal" },
+                { text: "Ever in a guerrilla group?", style: "normal" },
+                { text: "Guerrilla?", style: "casual" }
+            ],
+            chinese: "你曾经是游击队成员吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["guerrilla"],
+            tip: "guerrilla = 游击队"
+        },
+        {
+            id: "p12-19",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever worked in a prison or jail?", style: "formal" },
+                { text: "Ever worked in a prison?", style: "normal" },
+                { text: "Prison work?", style: "casual" }
+            ],
+            chinese: "你曾经在监狱工作过吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["prison", "jail"],
+            tip: "prison/jail = 监狱"
+        },
+        {
+            id: "p12-20",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever worked in a detention facility?", style: "formal" },
+                { text: "Ever worked at a detention center?", style: "normal" },
+                { text: "Detention?", style: "casual" }
+            ],
+            chinese: "你曾经在拘留所工作过吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["detention"],
+            tip: "detention = 拘留（被强制关押）"
+        },
+        {
+            id: "p12-21",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever worked in a labor camp?", style: "formal" },
+                { text: "Ever worked at a labor camp?", style: "normal" },
+                { text: "Labor camp?", style: "casual" }
+            ],
+            chinese: "你曾经在劳改营工作过吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["labor camp"],
+            tip: "labor camp = 劳改营（强制劳动）"
+        },
+        {
+            id: "p12-22",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever used a weapon against any person?", style: "formal" },
+                { text: "Ever used a weapon on someone?", style: "normal" },
+                { text: "Used weapon?", style: "casual" }
+            ],
+            chinese: "你曾经对任何人使用武器吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["weapon"],
+            tip: "weapon = 武器（枪、刀等）"
+        },
+        {
+            id: "p12-23",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever sold or provided weapons to anyone?", style: "formal" },
+                { text: "Ever sold weapons?", style: "normal" },
+                { text: "Sold weapons?", style: "casual" }
+            ],
+            chinese: "你曾经出售或提供武器给任何人吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["sold", "weapons"],
+            tip: "sold = 出售"
+        },
+        {
+            id: "p12-24",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever received any weapons training?", style: "formal" },
+                { text: "Ever had weapons training?", style: "normal" },
+                { text: "Weapons training?", style: "casual" }
+            ],
+            chinese: "你曾经接受过任何武器训练吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["weapons training"],
+            tip: "包括军事训练、射击训练等。"
+        },
+        {
+            id: "p12-25",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever recruited anyone under 15 to join an armed group?", style: "formal" },
+                { text: "Ever recruited children for armed groups?", style: "normal" },
+                { text: "Recruited under 15?", style: "casual" }
+            ],
+            chinese: "你曾经招募15岁以下的人加入武装团体吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["recruited", "under 15"],
+            tip: "recruited = 招募"
+        },
+        {
+            id: "p12-26",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever committed a crime that you were not arrested for?", style: "formal" },
+                { text: "Ever committed a crime without being caught?", style: "normal" },
+                { text: "Crime not arrested?", style: "casual" }
+            ],
+            chinese: "你曾经犯过但没有被逮捕的罪行吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["committed", "crime", "not arrested"],
+            tip: "即使没被抓也要如实回答（但通常回答No）"
+        },
+        {
+            id: "p12-27",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever been arrested, cited, or detained?", style: "formal" },
+                { text: "Have you ever been arrested?", style: "normal" },
+                { text: "Ever arrested?", style: "casual" }
+            ],
+            chinese: "你曾经被逮捕、传讯或拘留吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["arrested", "cited", "detained"],
+            tip: "arrested=逮捕, cited=开罚单/传讯, detained=拘留"
+        },
+        {
+            id: "p12-28",
+            category: "part12",
+            phrasings: [
+                { text: "Do you have any problems with the police?", style: "formal" },
+                { text: "Any trouble with the police?", style: "normal" },
+                { text: "Police problems?", style: "casual" }
+            ],
+            chinese: "你和警察有任何问题吗？",
+            answers: ["No, I don't.", "No."],
+            keywords: ["problems", "police"],
+            tip: "包括任何与执法部门的接触。"
+        },
+        {
+            id: "p12-29",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever been a habitual drunkard?", style: "formal" },
+                { text: "Have you ever had a drinking problem?", style: "normal" },
+                { text: "Habitual drunkard?", style: "casual" }
+            ],
+            chinese: "你曾经是惯性酗酒者吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["habitual drunkard"],
+            tip: "habitual drunkard = 惯性酗酒者"
+        },
+        {
+            id: "p12-30",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever been a prostitute?", style: "formal" },
+                { text: "Ever engaged in prostitution?", style: "normal" },
+                { text: "Prostitution?", style: "casual" }
+            ],
+            chinese: "你曾经从事卖淫吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["prostitute", "prostitution"],
+            tip: "prostitute = 妓女/卖淫者"
+        },
+        {
+            id: "p12-31",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever sold or smuggled illegal drugs?", style: "formal" },
+                { text: "Ever sold drugs?", style: "normal" },
+                { text: "Sold drugs?", style: "casual" }
+            ],
+            chinese: "你曾经出售或走私非法毒品吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["sold", "smuggled", "drugs"],
+            tip: "smuggled = 走私"
+        },
+        {
+            id: "p12-32",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever been married to more than one person at the same time?", style: "formal" },
+                { text: "Ever had more than one spouse at a time?", style: "normal" },
+                { text: "Multiple marriages same time?", style: "casual" }
+            ],
+            chinese: "你曾经同时与多人结婚吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["married", "more than one"],
+            tip: "这是问重婚，美国不允许。"
+        },
+        {
+            id: "p12-33",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever married someone to obtain immigration benefits?", style: "formal" },
+                { text: "Ever married for a green card?", style: "normal" },
+                { text: "Marriage for immigration?", style: "casual" }
+            ],
+            chinese: "你曾经为了获得移民福利而结婚吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["married", "immigration benefit"],
+            tip: "假结婚是非法的。"
+        },
+        {
+            id: "p12-34",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever helped anyone enter the United States illegally?", style: "formal" },
+                { text: "Ever helped someone enter the U.S. illegally?", style: "normal" },
+                { text: "Helped illegal entry?", style: "casual" }
+            ],
+            chinese: "你曾经帮助任何人非法进入美国吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["helped", "enter", "illegally"],
+            tip: "包括人口走私或帮助偷渡。"
+        },
+        {
+            id: "p12-35",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever gambled illegally?", style: "formal" },
+                { text: "Ever gambled illegally?", style: "normal" },
+                { text: "Illegal gambling?", style: "casual" }
+            ],
+            chinese: "你曾经非法赌博吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["gambled", "illegally"],
+            tip: "gambling = 赌博"
+        },
+        {
+            id: "p12-36",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever failed to support your dependents?", style: "formal" },
+                { text: "Do you pay child support?", style: "normal" },
+                { text: "Support dependents?", style: "casual" }
+            ],
+            chinese: "你曾经未能抚养你的受抚养人吗？",
+            answers: ["No, I have always supported them.", "No."],
+            keywords: ["failed", "support", "dependents"],
+            tip: "dependents = 受抚养人（如子女）"
+        },
+        {
+            id: "p12-37",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever given false information to any U.S. government official?", style: "formal" },
+                { text: "Ever given false info to the government?", style: "normal" },
+                { text: "False info?", style: "casual" }
+            ],
+            chinese: "你曾经向美国政府官员提供虚假信息吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["false", "information"],
+            tip: "false = 假的，fraudulent = 欺诈的"
+        },
+        {
+            id: "p12-38",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever lied to any U.S. government official to gain immigration benefits?", style: "formal" },
+                { text: "Ever lied to get immigration benefits?", style: "normal" },
+                { text: "Lied for benefits?", style: "casual" }
+            ],
+            chinese: "你曾经为获得移民福利而欺骗政府官员吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["lied", "immigration benefits"],
+            tip: "lied = 说谎"
+        },
+        {
+            id: "p12-39",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever been removed or deported from the United States?", style: "formal" },
+                { text: "Ever been deported?", style: "normal" },
+                { text: "Deported?", style: "casual" }
+            ],
+            chinese: "你曾经被从美国遣返或驱逐出境吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["removed", "deported"],
+            tip: "deported = 驱逐出境"
+        },
+        {
+            id: "p12-40",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever been placed in deportation proceedings?", style: "formal" },
+                { text: "Ever been in deportation proceedings?", style: "normal" },
+                { text: "Deportation proceedings?", style: "casual" }
+            ],
+            chinese: "你曾经被置于驱逐出境程序中吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["deportation proceedings"],
+            tip: "proceedings = 法律程序"
+        },
+        {
+            id: "p12-41",
+            category: "part12",
+            phrasings: [
+                { text: "Are you a male who lived in the United States between your 18th and 26th birthdays?", style: "formal" },
+                { text: "Did you live in the U.S. between ages 18 and 26?", style: "normal" },
+                { text: "Male, 18-26 in U.S.?", style: "casual" }
+            ],
+            chinese: "你是否在18至26岁之间以男性身份居住在美国？",
+            answers: ["No.", "Yes."],
+            keywords: ["male", "18", "26"],
+            tip: "如果Yes，需要注册Selective Service（兵役登记）"
+        },
+        {
+            id: "p12-42",
+            category: "part12",
+            phrasings: [
+                { text: "Did you register for the Selective Service?", style: "formal" },
+                { text: "Did you register for the draft?", style: "normal" },
+                { text: "Selective Service?", style: "casual" }
+            ],
+            chinese: "你登记了兵役吗？",
+            answers: ["Yes, I did.", "No, I was over 26 when I became a resident."],
+            keywords: ["Selective Service", "register"],
+            tip: "Selective Service = 兵役登记（18-26岁男性居民必须登记）"
+        },
+        {
+            id: "p12-43",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever left the United States to avoid being drafted?", style: "formal" },
+                { text: "Ever left to avoid the draft?", style: "normal" },
+                { text: "Avoid draft?", style: "casual" }
+            ],
+            chinese: "你曾经离开美国以避免被征兵吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["left", "avoid", "drafted"],
+            tip: "drafted = 被征召入伍"
+        },
+        {
+            id: "p12-44",
+            category: "part12",
+            phrasings: [
+                { text: "Have you ever served in the U.S. armed forces?", style: "formal" },
+                { text: "Ever served in the U.S. military?", style: "normal" },
+                { text: "U.S. military?", style: "casual" }
+            ],
+            chinese: "你曾经在美国军队服役吗？",
+            answers: ["No, I have not.", "No."],
+            keywords: ["served", "U.S. armed forces"],
+            tip: "armed forces = 军队"
+        },
+        {
+            id: "p12-45",
+            category: "part12",
+            phrasings: [
+                { text: "Do you have a hereditary title in any foreign country?", style: "formal" },
+                { text: "Do you have a title of nobility?", style: "normal" },
+                { text: "Noble title?", style: "casual" }
+            ],
+            chinese: "你在任何外国拥有世袭头衔吗？",
+            answers: ["No, I don't.", "No."],
+            keywords: ["hereditary title", "nobility"],
+            tip: "如王子、公爵等贵族头衔"
+        }
+    ],
+
+    // Oath 效忠誓词相关问题
+    oath: [
+        {
+            id: "o1",
+            category: "oath",
+            phrasings: [
+                { text: "Do you support the Constitution and form of Government of the United States?", style: "formal" },
+                { text: "Do you support the Constitution?", style: "normal" },
+                { text: "Support Constitution?", style: "casual" }
+            ],
+            chinese: "你是否支持美国宪法和政府形式？",
+            answers: ["Yes, I do.", "Yes."],
+            tip: "Constitution = 宪法"
+        },
+        {
+            id: "o2",
+            category: "oath",
+            phrasings: [
+                { text: "Do you understand the full Oath of Allegiance to the United States?", style: "formal" },
+                { text: "Do you understand the Oath?", style: "normal" },
+                { text: "Understand the Oath?", style: "casual" }
+            ],
+            chinese: "你是否理解美国效忠誓词的全部内容？",
+            answers: ["Yes, I do.", "Yes."],
+            tip: "Oath of Allegiance = 效忠誓词"
+        },
+        {
+            id: "o3",
+            category: "oath",
+            phrasings: [
+                { text: "Are you willing to take the full Oath of Allegiance to the United States?", style: "formal" },
+                { text: "Will you take the Oath?", style: "normal" },
+                { text: "Take the Oath?", style: "casual" }
+            ],
+            chinese: "你是否愿意宣读完整的效忠誓词？",
+            answers: ["Yes, I am.", "Yes."],
+            tip: "willing = 愿意"
+        },
+        {
+            id: "o4",
+            category: "oath",
+            phrasings: [
+                { text: "If the law requires it, are you willing to bear arms on behalf of the United States?", style: "formal" },
+                { text: "Will you bear arms for the U.S. if required?", style: "normal" },
+                { text: "Bear arms?", style: "casual" }
+            ],
+            chinese: "如果法律要求，你是否愿意代表美国携带武器参战？",
+            answers: ["Yes, I am.", "Yes."],
+            tip: "bear arms = 携带武器（参军作战）"
+        },
+        {
+            id: "o5",
+            category: "oath",
+            phrasings: [
+                { text: "If the law requires it, are you willing to perform noncombatant services in the U.S. armed forces?", style: "formal" },
+                { text: "Will you perform noncombatant service if required?", style: "normal" },
+                { text: "Noncombatant service?", style: "casual" }
+            ],
+            chinese: "如果法律要求，你是否愿意在美国军队中从事非战斗服务？",
+            answers: ["Yes, I am.", "Yes."],
+            tip: "noncombatant = 非战斗性的（如医疗、后勤）"
+        },
+        {
+            id: "o6",
+            category: "oath",
+            phrasings: [
+                { text: "If the law requires it, are you willing to perform work of national importance under civilian direction?", style: "formal" },
+                { text: "Will you do civilian work of national importance if required?", style: "normal" },
+                { text: "Work of national importance?", style: "casual" }
+            ],
+            chinese: "如果法律要求，你是否愿意在民事指挥下从事对国家有重要意义的工作？",
+            answers: ["Yes, I am.", "Yes."],
+            tip: "civilian direction = 民事指挥（非军事）"
+        },
+        {
+            id: "o7",
+            category: "oath",
+            phrasings: [
+                { text: "Are you unable to take the Oath because of a physical or mental disability?", style: "formal" },
+                { text: "Do you have any disability preventing you from taking the Oath?", style: "normal" },
+                { text: "Disability?", style: "casual" }
+            ],
+            chinese: "由于身体或精神障碍，你是否无法宣誓效忠？",
+            answers: ["No, I am able to take the Oath.", "No."],
+            tip: "如果有残疾可以申请豁免。"
+        },
+        {
+            id: "o8",
+            category: "oath",
+            phrasings: [
+                { text: "What does 'bear arms' mean?", style: "formal" },
+                { text: "What is bear arms?", style: "normal" }
+            ],
+            chinese: "'bear arms' 是什么意思？",
+            answers: ["It means to carry weapons or fight for the country."],
+            tip: "bear arms = 携带武器，为国家战斗"
+        },
+        {
+            id: "o9",
+            category: "oath",
+            phrasings: [
+                { text: "What does 'noncombatant' mean?", style: "formal" },
+                { text: "What is noncombatant?", style: "normal" }
+            ],
+            chinese: "'noncombatant' 是什么意思？",
+            answers: ["It means not fighting, like medical or support work."],
+            tip: "noncombatant = 非战斗的，不用打仗"
+        },
+        {
+            id: "o10",
+            category: "oath",
+            phrasings: [
+                { text: "What does 'work of national importance' mean?", style: "formal" },
+                { text: "What is work of national importance?", style: "normal" }
+            ],
+            chinese: "'work of national importance' 是什么意思？",
+            answers: ["It means doing important work for the country, like driving, cooking, or helping the government."],
+            tip: "为国家做重要的非军事工作"
+        }
+    ]
+};
+
+// 模拟面试模式：从各部分随机抽取问题
+function getMockInterviewQuestions(count = 25) {
+    const allQuestions = [];
+
+    // 从每个类别抽取
+    const categories = ['warmup', 'part2', 'part3-9', 'part12', 'oath'];
+    const distribution = {
+        warmup: 3,
+        part2: 5,
+        'part3-9': 7,
+        part12: 8,
+        oath: 2
+    };
+
+    categories.forEach(cat => {
+        const questions = questionDatabase[cat];
+        const shuffled = [...questions].sort(() => Math.random() - 0.5);
+        allQuestions.push(...shuffled.slice(0, distribution[cat]));
+    });
+
+    // 打乱顺序但保持热身题在前面
+    const warmupQuestions = allQuestions.filter(q => q.category === 'warmup');
+    const otherQuestions = allQuestions.filter(q => q.category !== 'warmup')
+        .sort(() => Math.random() - 0.5);
+
+    return [...warmupQuestions, ...otherQuestions];
+}
+
+// 获取模块的所有问题
+function getModuleQuestions(module) {
+    if (module === 'mock') {
+        return getMockInterviewQuestions();
+    }
+    return questionDatabase[module] || [];
+}
+
+// 获取随机问法
+function getRandomPhrasing(question, difficulty = 'normal') {
+    const phrasings = question.phrasings;
+
+    if (difficulty === 'easy') {
+        // 入门模式：只用正式问法
+        const formal = phrasings.find(p => p.style === 'formal') || phrasings[0];
+        return formal.text;
+    } else if (difficulty === 'hard') {
+        // 挑战模式：倾向于用简短问法
+        const casual = phrasings.filter(p => p.style === 'casual');
+        if (casual.length > 0) {
+            return casual[Math.floor(Math.random() * casual.length)].text;
+        }
+    }
+
+    // 正常模式：随机选择
+    return phrasings[Math.floor(Math.random() * phrasings.length)].text;
+}
+
+// 模块信息
+const moduleInfo = {
+    warmup: {
+        title: "热身问题 Warm-up",
+        titleEn: "Warm-up Questions",
+        description: "面试开场白与基本寒暄"
+    },
+    part2: {
+        title: "Part 2: 个人信息",
+        titleEn: "Personal Information",
+        description: "姓名、生日、地址等基本信息"
+    },
+    "part3-9": {
+        title: "Part 3-9: 历史信息",
+        titleEn: "Background Information",
+        description: "居住、工作、旅行、婚姻、子女"
+    },
+    part12: {
+        title: "Part 12: 道德品质",
+        titleEn: "Good Moral Character",
+        description: "Have you ever... 是非题"
+    },
+    oath: {
+        title: "效忠誓词 Oath",
+        titleEn: "Oath of Allegiance",
+        description: "宪法支持与效忠宣誓问题"
+    },
+    mock: {
+        title: "模拟面试",
+        titleEn: "Mock Interview",
+        description: "完整模拟真实面试流程"
+    },
+    vocabulary: {
+        title: "📚 词汇学习",
+        titleEn: "Vocabulary Study",
+        description: "N-400核心词汇与名词解释"
+    }
+};
+
+// ==================== 词汇表 / Glossary ====================
+// 按类别分组的核心词汇
+
+const vocabularyDatabase = {
+    // 基本身份词汇
+    identity: {
+        title: "身份信息 Identity",
+        words: [
+            {
+                word: "Full Legal Name",
+                pronunciation: "/fʊl ˈliːɡəl neɪm/",
+                chinese: "法定全名",
+                definition: "Your complete official name as shown on legal documents like your green card or passport.",
+                example: "What is your full legal name? — My full legal name is Zhimeng Fan.",
+                tip: "按照绿卡上的顺序说：First Name + Last Name"
+            },
+            {
+                word: "Middle Name",
+                pronunciation: "/ˈmɪdl neɪm/",
+                chinese: "中间名",
+                definition: "A name between your first name and last name. Many Chinese people don't have one.",
+                example: "Do you have a middle name? — No, I don't have a middle name.",
+                tip: "中国人通常没有中间名，回答 No"
+            },
+            {
+                word: "Maiden Name",
+                pronunciation: "/ˈmeɪdn neɪm/",
+                chinese: "婚前姓",
+                definition: "A woman's family name before she got married.",
+                example: "What was your maiden name? — My maiden name was Zhang.",
+                tip: "女性婚后改姓时会用到"
+            },
+            {
+                word: "Nickname",
+                pronunciation: "/ˈnɪkneɪm/",
+                chinese: "昵称，绰号",
+                definition: "An informal name used by friends or family instead of your real name.",
+                example: "Do you have any nicknames? — Yes, my friends call me Kevin.",
+                tip: "也叫 alias（别名）"
+            },
+            {
+                word: "A-Number (Alien Registration Number)",
+                pronunciation: "/eɪ ˈnʌmbər/",
+                chinese: "外国人登记号码",
+                definition: "A 9-digit number that USCIS assigns to immigrants. It starts with 'A-'.",
+                example: "What is your A-Number? — My A-Number is A-215571545.",
+                tip: "在绿卡正面可以找到"
+            },
+            {
+                word: "Date of Birth (DOB)",
+                pronunciation: "/deɪt əv bɜːrθ/",
+                chinese: "出生日期",
+                definition: "The day you were born, written as month/day/year in the US.",
+                example: "What is your date of birth? — October twenty-fifth, nineteen eighty-one.",
+                tip: "用英文说月份，不要只说数字"
+            },
+            {
+                word: "Country of Birth",
+                pronunciation: "/ˈkʌntri əv bɜːrθ/",
+                chinese: "出生国家",
+                definition: "The country where you were born.",
+                example: "What is your country of birth? — China.",
+                tip: "说国家名称即可"
+            },
+            {
+                word: "Nationality / Citizenship",
+                pronunciation: "/næʃəˈnæləti/",
+                chinese: "国籍",
+                definition: "The country you legally belong to as a citizen.",
+                example: "What is your nationality? — Chinese.",
+                tip: "nationality 和 citizenship 意思相近"
+            },
+            {
+                word: "Ethnicity",
+                pronunciation: "/eθˈnɪsəti/",
+                chinese: "族裔",
+                definition: "Your cultural background. The form asks if you are Hispanic or Latino.",
+                example: "Are you Hispanic or Latino? — No, I am not Hispanic or Latino.",
+                tip: "中国人回答 'Not Hispanic or Latino'"
+            },
+            {
+                word: "Race",
+                pronunciation: "/reɪs/",
+                chinese: "种族",
+                definition: "Categories based on physical characteristics. Options include Asian, White, Black, etc.",
+                example: "What is your race? — Asian.",
+                tip: "中国人选择 Asian"
+            }
+        ]
+    },
+
+    // 居住与地址
+    residence: {
+        title: "居住地址 Residence",
+        words: [
+            {
+                word: "Physical Address",
+                pronunciation: "/ˈfɪzɪkl əˈdres/",
+                chinese: "实际居住地址",
+                definition: "The place where you actually live, not a P.O. Box.",
+                example: "What is your physical address? — 20751 E Rim Lane, Walnut, CA 91789.",
+                tip: "你真正住的地方"
+            },
+            {
+                word: "Mailing Address",
+                pronunciation: "/ˈmeɪlɪŋ əˈdres/",
+                chinese: "邮寄地址",
+                definition: "The address where you receive mail. Can be different from where you live.",
+                example: "Is your mailing address the same as your physical address? — Yes, it is.",
+                tip: "收信的地址，可能和住址不同"
+            },
+            {
+                word: "Permanent Resident",
+                pronunciation: "/ˈpɜːrmənənt ˈrezɪdənt/",
+                chinese: "永久居民",
+                definition: "Someone who has a green card and can legally live and work in the US permanently.",
+                example: "When did you become a permanent resident? — April 27, 2020.",
+                tip: "也叫 green card holder"
+            },
+            {
+                word: "Lawful Permanent Resident (LPR)",
+                pronunciation: "/ˈlɔːfəl/",
+                chinese: "合法永久居民",
+                definition: "The official term for someone with a green card.",
+                example: "Are you a lawful permanent resident? — Yes, I am.",
+                tip: "LPR 是官方用语"
+            },
+            {
+                word: "Residence",
+                pronunciation: "/ˈrezɪdəns/",
+                chinese: "居住地",
+                definition: "The place where you live.",
+                example: "How long have you lived at your current residence? — About 3 years.",
+                tip: "residence = 住所"
+            }
+        ]
+    },
+
+    // 婚姻与家庭
+    family: {
+        title: "婚姻家庭 Family",
+        words: [
+            {
+                word: "Marital Status",
+                pronunciation: "/ˈmærɪtl ˈsteɪtəs/",
+                chinese: "婚姻状况",
+                definition: "Whether you are single, married, divorced, widowed, or separated.",
+                example: "What is your marital status? — I am married.",
+                tip: "Single单身/Married已婚/Divorced离婚/Widowed丧偶/Separated分居"
+            },
+            {
+                word: "Spouse",
+                pronunciation: "/spaʊs/",
+                chinese: "配偶",
+                definition: "Your husband or wife.",
+                example: "What is your spouse's name? — [Name].",
+                tip: "spouse 是中性词，包括丈夫和妻子"
+            },
+            {
+                word: "Marriage Certificate",
+                pronunciation: "/ˈmærɪdʒ sərˈtɪfɪkət/",
+                chinese: "结婚证",
+                definition: "Official document proving you are legally married.",
+                example: "Do you have your marriage certificate? — Yes, here it is.",
+                tip: "面试时需要带原件"
+            },
+            {
+                word: "Divorce Decree",
+                pronunciation: "/dɪˈvɔːrs dɪˈkriː/",
+                chinese: "离婚判决书",
+                definition: "Legal document that ends a marriage.",
+                example: "Do you have your divorce decree? — Yes.",
+                tip: "如果离过婚需要带这个文件"
+            },
+            {
+                word: "Biological Child",
+                pronunciation: "/baɪəˈlɑːdʒɪkl tʃaɪld/",
+                chinese: "亲生子女",
+                definition: "A child born to you, not adopted.",
+                example: "Are they your biological children? — Yes, they are.",
+                tip: "biological = 亲生的"
+            },
+            {
+                word: "Stepchild",
+                pronunciation: "/ˈsteptʃaɪld/",
+                chinese: "继子女",
+                definition: "Your spouse's child from a previous relationship.",
+                example: "Do you have any stepchildren? — No.",
+                tip: "配偶前段关系的孩子"
+            },
+            {
+                word: "Dependents",
+                pronunciation: "/dɪˈpendənts/",
+                chinese: "受抚养人",
+                definition: "People who rely on you for financial support, usually children.",
+                example: "Do you support your dependents? — Yes, I do.",
+                tip: "通常指需要你抚养的子女"
+            },
+            {
+                word: "Alimony",
+                pronunciation: "/ˈæləmoʊni/",
+                chinese: "赡养费",
+                definition: "Money paid to a former spouse after divorce.",
+                example: "Do you pay alimony? — No, I don't.",
+                tip: "离婚后给前配偶的费用"
+            },
+            {
+                word: "Child Support",
+                pronunciation: "/tʃaɪld səˈpɔːrt/",
+                chinese: "子女抚养费",
+                definition: "Money paid to support your children after divorce.",
+                example: "Do you pay child support? — No, my children live with me.",
+                tip: "给孩子的抚养费"
+            }
+        ]
+    },
+
+    // 工作与教育
+    employment: {
+        title: "工作教育 Employment",
+        words: [
+            {
+                word: "Occupation",
+                pronunciation: "/ɑːkjuˈpeɪʃn/",
+                chinese: "职业",
+                definition: "Your job or profession.",
+                example: "What is your occupation? — Life Insurance Broker.",
+                tip: "occupation = job = profession"
+            },
+            {
+                word: "Employer",
+                pronunciation: "/ɪmˈplɔɪər/",
+                chinese: "雇主",
+                definition: "The company or person you work for.",
+                example: "Who is your employer? — Premier Financial Alliance.",
+                tip: "你工作的公司"
+            },
+            {
+                word: "Self-employed",
+                pronunciation: "/self ɪmˈplɔɪd/",
+                chinese: "自雇，自营职业",
+                definition: "Working for yourself, not for a company.",
+                example: "Are you self-employed? — Yes, I run my own business.",
+                tip: "自己当老板"
+            },
+            {
+                word: "Unemployed",
+                pronunciation: "/ʌnɪmˈplɔɪd/",
+                chinese: "失业",
+                definition: "Not having a job.",
+                example: "Are you currently employed? — No, I am unemployed.",
+                tip: "没有工作"
+            },
+            {
+                word: "Retired",
+                pronunciation: "/rɪˈtaɪərd/",
+                chinese: "退休",
+                definition: "No longer working because of age.",
+                example: "What do you do? — I am retired.",
+                tip: "因年龄而停止工作"
+            }
+        ]
+    },
+
+    // 移民与身份
+    immigration: {
+        title: "移民身份 Immigration",
+        words: [
+            {
+                word: "Green Card",
+                pronunciation: "/ɡriːn kɑːrd/",
+                chinese: "绿卡",
+                definition: "The card that shows you are a permanent resident of the US.",
+                example: "May I see your green card? — Here you go.",
+                tip: "永久居民卡的俗称"
+            },
+            {
+                word: "Naturalization",
+                pronunciation: "/nætʃərələˈzeɪʃn/",
+                chinese: "入籍，归化",
+                definition: "The process of becoming a US citizen.",
+                example: "Why are you here? — For my naturalization interview.",
+                tip: "入籍的正式说法"
+            },
+            {
+                word: "Asylum",
+                pronunciation: "/əˈsaɪləm/ (饿-塞-冷)",
+                chinese: "庇护",
+                definition: "Protection given to people who fled their country due to persecution.",
+                example: "How did you get your green card? — By asylum.",
+                tip: "发音像'饿塞冷'"
+            },
+            {
+                word: "Political Asylum",
+                pronunciation: "/pəˈlɪtɪkl əˈsaɪləm/",
+                chinese: "政治庇护",
+                definition: "Asylum granted because of political persecution.",
+                example: "What kind of asylum? — Political asylum.",
+                tip: "因政治原因申请的庇护"
+            },
+            {
+                word: "Refugee",
+                pronunciation: "/refjuˈdʒiː/",
+                chinese: "难民",
+                definition: "Someone who fled their country due to war or persecution.",
+                example: "Are you a refugee? — Yes, I came as a refugee.",
+                tip: "因战争或迫害逃离的人"
+            },
+            {
+                word: "Refugee Travel Document",
+                pronunciation: "/ˈtrævl ˈdɑːkjumənt/",
+                chinese: "难民旅行证件",
+                definition: "Travel document for refugees and asylees who cannot use their country's passport.",
+                example: "Do you have a Refugee Travel Document? — Yes.",
+                tip: "庇护者用来旅行的证件"
+            },
+            {
+                word: "Port of Entry",
+                pronunciation: "/pɔːrt əv ˈentri/",
+                chinese: "入境口岸",
+                definition: "The airport or border crossing where you entered the US.",
+                example: "Which port of entry did you use? — Los Angeles.",
+                tip: "你进入美国的地点"
+            },
+            {
+                word: "Visa",
+                pronunciation: "/ˈviːzə/",
+                chinese: "签证",
+                definition: "Official permission to enter a country.",
+                example: "What visa did you use to enter? — Tourist visa.",
+                tip: "进入国家的许可"
+            },
+            {
+                word: "Deported / Removed",
+                pronunciation: "/dɪˈpɔːrtɪd/",
+                chinese: "被驱逐出境",
+                definition: "Forced to leave a country by the government.",
+                example: "Have you ever been deported? — No, I have not.",
+                tip: "被政府强制离开"
+            },
+            {
+                word: "Deportation Proceedings",
+                pronunciation: "/diːpɔːrˈteɪʃn prəˈsiːdɪŋz/",
+                chinese: "驱逐出境程序",
+                definition: "Legal process to remove someone from the country.",
+                example: "Have you been in deportation proceedings? — No.",
+                tip: "遣返的法律程序"
+            }
+        ]
+    },
+
+    // 税务与法律
+    legal: {
+        title: "税务法律 Legal & Taxes",
+        words: [
+            {
+                word: "File Taxes",
+                pronunciation: "/faɪl ˈtæksɪz/",
+                chinese: "报税",
+                definition: "To submit your tax return to the government.",
+                example: "Do you file your taxes every year? — Yes, I always file on time.",
+                tip: "file = 提交申报"
+            },
+            {
+                word: "Tax Return",
+                pronunciation: "/tæks rɪˈtɜːrn/",
+                chinese: "报税表",
+                definition: "The forms you fill out to report your income to the government.",
+                example: "Did you bring your tax returns? — Yes, here they are.",
+                tip: "面试时要带近5年的税单"
+            },
+            {
+                word: "Owe",
+                pronunciation: "/oʊ/",
+                chinese: "欠",
+                definition: "To need to pay money to someone.",
+                example: "Do you owe any taxes? — No, I don't owe any taxes.",
+                tip: "owe = 欠钱"
+            },
+            {
+                word: "Overdue",
+                pronunciation: "/oʊvərˈduː/",
+                chinese: "逾期的，过期的",
+                definition: "Past the due date, late.",
+                example: "Do you have any overdue taxes? — No.",
+                tip: "过了期限还没付"
+            },
+            {
+                word: "Nonresident",
+                pronunciation: "/nɑːnˈrezɪdənt/",
+                chinese: "非居民",
+                definition: "Someone who does not live in a place permanently.",
+                example: "Have you claimed to be a nonresident? — No, I am a resident.",
+                tip: "绿卡持有者是居民，不是非居民"
+            },
+            {
+                word: "Arrested",
+                pronunciation: "/əˈrestɪd/",
+                chinese: "被逮捕",
+                definition: "Taken into police custody.",
+                example: "Have you ever been arrested? — No, I have not.",
+                tip: "被警察抓"
+            },
+            {
+                word: "Cited",
+                pronunciation: "/ˈsaɪtɪd/",
+                chinese: "被开罚单，被传讯",
+                definition: "Given a ticket or notice to appear in court.",
+                example: "Have you ever been cited? — No.",
+                tip: "收到罚单或传票"
+            },
+            {
+                word: "Detained",
+                pronunciation: "/dɪˈteɪnd/",
+                chinese: "被拘留",
+                definition: "Held by authorities, not allowed to leave.",
+                example: "Have you ever been detained? — No.",
+                tip: "被强制扣押"
+            },
+            {
+                word: "Probation",
+                pronunciation: "/proʊˈbeɪʃn/",
+                chinese: "缓刑",
+                definition: "A period of supervision instead of jail time.",
+                example: "Were you placed on probation? — No.",
+                tip: "不用坐牢但要被监督"
+            },
+            {
+                word: "Parole",
+                pronunciation: "/pəˈroʊl/",
+                chinese: "假释",
+                definition: "Early release from prison with conditions.",
+                example: "Have you completed your parole? — Not applicable.",
+                tip: "提前出狱但有条件"
+            }
+        ]
+    },
+
+    // 道德品质（Part 12核心词汇）
+    moralCharacter: {
+        title: "道德品质 Moral Character",
+        words: [
+            {
+                word: "Claimed",
+                pronunciation: "/kleɪmd/",
+                chinese: "声称，宣称",
+                definition: "Said that something is true, especially when it might not be.",
+                example: "Have you ever claimed to be a US citizen? — No.",
+                tip: "claim = 声称（可能不是真的）"
+            },
+            {
+                word: "Vote / Registered to Vote",
+                pronunciation: "/voʊt/",
+                chinese: "投票 / 登记投票",
+                definition: "To cast a ballot in an election / to sign up to be able to vote.",
+                example: "Have you ever voted in the US? — No, I have never voted.",
+                tip: "绿卡持有者不能投票"
+            },
+            {
+                word: "Communist Party",
+                pronunciation: "/ˈkɑːmjunɪst ˈpɑːrti/",
+                chinese: "共产党",
+                definition: "A political party based on communism, like in China or Cuba.",
+                example: "Were you ever a member of the Communist Party? — No.",
+                tip: "如中国共产党"
+            },
+            {
+                word: "Totalitarian",
+                pronunciation: "/toʊtælɪˈteriən/",
+                chinese: "极权主义的",
+                definition: "A government that has complete control and allows no freedom.",
+                example: "Were you in a totalitarian party? — No.",
+                tip: "一党专政，没有自由"
+            },
+            {
+                word: "Advocated",
+                pronunciation: "/ˈædvəkeɪtɪd/",
+                chinese: "主张，支持",
+                definition: "Publicly supported or recommended.",
+                example: "Have you advocated overthrowing any government? — No.",
+                tip: "advocate = 支持、提倡"
+            },
+            {
+                word: "Overthrow",
+                pronunciation: "/oʊvərˈθroʊ/",
+                chinese: "推翻",
+                definition: "To remove a government or leader by force.",
+                example: "Have you supported overthrowing a government? — No.",
+                tip: "用武力推翻政府"
+            },
+            {
+                word: "Persecuted",
+                pronunciation: "/ˈpɜːrsɪkjuːtɪd/",
+                chinese: "迫害",
+                definition: "Treated cruelly because of race, religion, or beliefs.",
+                example: "Have you ever persecuted anyone? — No.",
+                tip: "因种族、宗教等伤害他人"
+            },
+            {
+                word: "Genocide",
+                pronunciation: "/ˈdʒenəsaɪd/",
+                chinese: "种族灭绝",
+                definition: "The deliberate killing of a large group of people, especially an ethnic group.",
+                example: "Have you participated in genocide? — No.",
+                tip: "大规模屠杀某一种族"
+            },
+            {
+                word: "Torture",
+                pronunciation: "/ˈtɔːrtʃər/",
+                chinese: "酷刑，折磨",
+                definition: "Causing severe pain to someone as punishment or to get information.",
+                example: "Have you ever participated in torture? — No.",
+                tip: "让人极度痛苦"
+            },
+            {
+                word: "Weapon",
+                pronunciation: "/ˈwepən/",
+                chinese: "武器",
+                definition: "Something used to hurt people, like guns or knives.",
+                example: "Have you ever used a weapon against anyone? — No.",
+                tip: "枪、刀等伤人的东西"
+            },
+            {
+                word: "Smuggled",
+                pronunciation: "/ˈsmʌɡld/",
+                chinese: "走私",
+                definition: "Illegally transported goods or people across borders.",
+                example: "Have you ever smuggled drugs? — No.",
+                tip: "非法运输"
+            },
+            {
+                word: "Prostitution",
+                pronunciation: "/prɑːstɪˈtuːʃn/",
+                chinese: "卖淫",
+                definition: "The practice of having sex for money.",
+                example: "Have you engaged in prostitution? — No.",
+                tip: "性交易"
+            },
+            {
+                word: "Gambling",
+                pronunciation: "/ˈɡæmblɪŋ/",
+                chinese: "赌博",
+                definition: "Playing games for money.",
+                example: "Have you gambled illegally? — No.",
+                tip: "非法赌博"
+            },
+            {
+                word: "Habitual Drunkard",
+                pronunciation: "/həˈbɪtʃuəl ˈdrʌŋkərd/",
+                chinese: "惯性酗酒者",
+                definition: "Someone who regularly drinks too much alcohol.",
+                example: "Are you a habitual drunkard? — No.",
+                tip: "经常喝醉的人"
+            }
+        ]
+    },
+
+    // 军事服役
+    military: {
+        title: "军事服役 Military",
+        words: [
+            {
+                word: "Armed Forces",
+                pronunciation: "/ɑːrmd ˈfɔːrsɪz/",
+                chinese: "武装部队，军队",
+                definition: "The military forces of a country (Army, Navy, Air Force, etc.).",
+                example: "Have you served in the US armed forces? — No.",
+                tip: "包括陆军、海军、空军等"
+            },
+            {
+                word: "Military",
+                pronunciation: "/ˈmɪlɪteri/",
+                chinese: "军事的，军队",
+                definition: "Related to the armed forces or soldiers.",
+                example: "Have you had military training? — No.",
+                tip: "与军队相关"
+            },
+            {
+                word: "Paramilitary",
+                pronunciation: "/pærəˈmɪlɪteri/",
+                chinese: "准军事的",
+                definition: "A group organized like a military but not part of the official armed forces.",
+                example: "Were you in a paramilitary group? — No.",
+                tip: "像军队但非官方"
+            },
+            {
+                word: "Rebel Group",
+                pronunciation: "/ˈrebl ɡruːp/",
+                chinese: "叛军组织",
+                definition: "A group that fights against their government.",
+                example: "Were you in a rebel group? — No.",
+                tip: "反抗政府的武装组织"
+            },
+            {
+                word: "Guerrilla",
+                pronunciation: "/ɡəˈrɪlə/",
+                chinese: "游击队",
+                definition: "A member of a small fighting group that attacks by surprise.",
+                example: "Were you in a guerrilla group? — No.",
+                tip: "打游击战的组织"
+            },
+            {
+                word: "Selective Service",
+                pronunciation: "/sɪˈlektɪv ˈsɜːrvɪs/",
+                chinese: "兵役登记",
+                definition: "The system that requires men 18-25 to register for potential military draft.",
+                example: "Did you register for Selective Service? — Yes, I did.",
+                tip: "18-26岁男性居民必须登记"
+            },
+            {
+                word: "Draft / Drafted",
+                pronunciation: "/dræft/",
+                chinese: "征兵 / 被征召",
+                definition: "Required by law to join the military.",
+                example: "Did you leave to avoid being drafted? — No.",
+                tip: "被强制要求参军"
+            },
+            {
+                word: "Deserted",
+                pronunciation: "/dɪˈzɜːrtɪd/",
+                chinese: "逃兵，擅离职守",
+                definition: "Left the military without permission.",
+                example: "Have you deserted from the military? — No.",
+                tip: "不经允许离开军队"
+            },
+            {
+                word: "Court-martialed",
+                pronunciation: "/kɔːrt ˈmɑːrʃld/",
+                chinese: "军事法庭审判",
+                definition: "Tried in a military court for breaking military rules.",
+                example: "Have you been court-martialed? — No.",
+                tip: "在军事法庭受审"
+            },
+            {
+                word: "Dishonorable Discharge",
+                pronunciation: "/dɪsˈɑːnərəbl ˈdɪstʃɑːrdʒ/",
+                chinese: "不名誉退伍",
+                definition: "Being dismissed from the military for serious misconduct.",
+                example: "Did you receive a dishonorable discharge? — No.",
+                tip: "因严重违规被开除"
+            }
+        ]
+    },
+
+    // 效忠誓词
+    oath: {
+        title: "效忠誓词 Oath",
+        words: [
+            {
+                word: "Oath of Allegiance",
+                pronunciation: "/oʊθ əv əˈliːdʒəns/",
+                chinese: "效忠誓词",
+                definition: "The promise new citizens make to be loyal to the United States.",
+                example: "Do you understand the Oath of Allegiance? — Yes, I do.",
+                tip: "入籍仪式上要念的誓词"
+            },
+            {
+                word: "Constitution",
+                pronunciation: "/kɑːnstɪˈtuːʃn/",
+                chinese: "宪法",
+                definition: "The supreme law of the United States.",
+                example: "Do you support the Constitution? — Yes, I do.",
+                tip: "美国最高法律"
+            },
+            {
+                word: "Bear Arms",
+                pronunciation: "/ber ɑːrmz/",
+                chinese: "携带武器参战",
+                definition: "To carry weapons and fight for your country.",
+                example: "Are you willing to bear arms? — Yes, if the law requires it.",
+                tip: "为国家参军作战"
+            },
+            {
+                word: "Noncombatant Services",
+                pronunciation: "/nɑːnˈkɑːmbətənt/",
+                chinese: "非战斗服务",
+                definition: "Military work that doesn't involve fighting, like medical or office work.",
+                example: "Will you perform noncombatant services? — Yes.",
+                tip: "不用打仗的军事工作"
+            },
+            {
+                word: "Work of National Importance",
+                pronunciation: "/wɜːrk əv næʃənl ɪmˈpɔːrtns/",
+                chinese: "对国家有重要意义的工作",
+                definition: "Civilian work that helps the country, like driving or cooking for the government.",
+                example: "Will you perform work of national importance? — Yes.",
+                tip: "非军事的国家服务"
+            },
+            {
+                word: "Civilian Direction",
+                pronunciation: "/səˈvɪliən dəˈrekʃn/",
+                chinese: "民事指挥",
+                definition: "Under the control of non-military authorities.",
+                example: "Under civilian direction means not military leadership.",
+                tip: "由非军事人员领导"
+            },
+            {
+                word: "Renounce",
+                pronunciation: "/rɪˈnaʊns/",
+                chinese: "放弃，宣布脱离",
+                definition: "To formally give up something, like citizenship in another country.",
+                example: "I renounce allegiance to any foreign country.",
+                tip: "誓词中要放弃对外国的效忠"
+            },
+            {
+                word: "Allegiance",
+                pronunciation: "/əˈliːdʒəns/",
+                chinese: "效忠，忠诚",
+                definition: "Loyalty to a country or leader.",
+                example: "I pledge allegiance to the United States.",
+                tip: "对国家的忠诚"
+            },
+            {
+                word: "Hereditary Title / Order of Nobility",
+                pronunciation: "/həˈredɪteri ˈtaɪtl/",
+                chinese: "世袭头衔 / 贵族爵位",
+                definition: "A title of rank (like Prince or Duke) passed down in a family.",
+                example: "Do you have a title of nobility? — No.",
+                tip: "如王子、公爵等头衔"
+            }
+        ]
+    },
+
+    // 常用动词与短语
+    verbs: {
+        title: "常用动词 Common Verbs",
+        words: [
+            {
+                word: "Swear",
+                pronunciation: "/swer/",
+                chinese: "宣誓",
+                definition: "To make a serious promise, often in a legal or religious context.",
+                example: "Do you swear to tell the truth? — Yes, I do.",
+                tip: "发誓、宣誓"
+            },
+            {
+                word: "Claim",
+                pronunciation: "/kleɪm/",
+                chinese: "声称，宣称",
+                definition: "To say something is true.",
+                example: "Have you claimed to be a citizen? — No.",
+                tip: "claim = 声称"
+            },
+            {
+                word: "Support",
+                pronunciation: "/səˈpɔːrt/",
+                chinese: "支持，抚养",
+                definition: "To help someone financially or to agree with something.",
+                example: "Do you support your children? — Yes.",
+                tip: "经济支持或表示赞同"
+            },
+            {
+                word: "Commit",
+                pronunciation: "/kəˈmɪt/",
+                chinese: "犯（罪）",
+                definition: "To do something wrong or illegal.",
+                example: "Have you committed any crimes? — No.",
+                tip: "commit a crime = 犯罪"
+            },
+            {
+                word: "Provide",
+                pronunciation: "/prəˈvaɪd/",
+                chinese: "提供",
+                definition: "To give or supply something.",
+                example: "Did you provide false information? — No.",
+                tip: "provide = 给予"
+            },
+            {
+                word: "Register",
+                pronunciation: "/ˈredʒɪstər/",
+                chinese: "登记，注册",
+                definition: "To officially record your name for something.",
+                example: "Did you register for Selective Service? — Yes.",
+                tip: "正式登记"
+            },
+            {
+                word: "Enter",
+                pronunciation: "/ˈentər/",
+                chinese: "进入",
+                definition: "To go into a place.",
+                example: "When did you enter the United States? — May 2017.",
+                tip: "入境"
+            },
+            {
+                word: "Fail",
+                pronunciation: "/feɪl/",
+                chinese: "失败，未能",
+                definition: "To not do something that was expected.",
+                example: "Did you fail to file taxes? — No, I always file.",
+                tip: "fail to = 未能做到"
+            }
+        ]
+    }
+};
+
+// 获取所有词汇（用于学习模式）
+function getAllVocabulary() {
+    const allWords = [];
+    for (const category in vocabularyDatabase) {
+        allWords.push(...vocabularyDatabase[category].words.map(w => ({
+            ...w,
+            category: category,
+            categoryTitle: vocabularyDatabase[category].title
+        })));
+    }
+    return allWords;
+}
+
+// 获取某类别的词汇
+function getVocabularyByCategory(category) {
+    return vocabularyDatabase[category]?.words || [];
+}
+// N-400 Interview Simulator - Main Application
+// 主应用程序逻辑
+
+// ==================== 状态管理 ====================
+const state = {
+    currentModule: null,
+    currentQuestions: [],
+    currentQuestionIndex: 0,
+    settings: {
+        difficulty: 'normal',
+        showChinese: true,
+        autoNext: true,
+        randomPhrasing: true,
+        filter: 'all'
+    },
+    progress: {
+        practiced: {},
+        mastered: {},
+        needsPractice: {}
+    },
+    sessionStats: {
+        correct: 0,
+        incorrect: 0
+    },
+    speechSynthesis: null,
+    speechRecognition: null,
+    isListening: false,
+    isSpeaking: false
+};
+
+// ==================== 初始化 ====================
+document.addEventListener('DOMContentLoaded', function() {
+    initializeApp();
+});
+
+function initializeApp() {
+    // 加载保存的进度
+    loadProgress();
+
+    // 初始化语音合成
+    initSpeechSynthesis();
+
+    // 初始化语音识别
+    initSpeechRecognition();
+
+    // 绑定事件
+    bindEvents();
+
+    // 显示首页
+    showHome();
+}
+
+// ==================== 语音合成（文字转语音）====================
+function initSpeechSynthesis() {
+    if ('speechSynthesis' in window) {
+        state.speechSynthesis = window.speechSynthesis;
+
+        // 等待voices加载
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => {
+                getAvailableVoices();
+            };
+        }
+
+        // 立即尝试获取voices
+        setTimeout(getAvailableVoices, 100);
+    } else {
+        console.warn('Speech synthesis not supported');
+    }
+}
+
+function getAvailableVoices() {
+    const voices = speechSynthesis.getVoices();
+    // 优先选择美式英语人声
+    const preferredVoices = voices.filter(v =>
+        v.lang.includes('en-US') || v.lang.includes('en_US')
+    );
+
+    if (preferredVoices.length > 0) {
+        // 尝试找一个自然的声音
+        state.preferredVoice = preferredVoices.find(v =>
+            v.name.includes('Samantha') ||
+            v.name.includes('Alex') ||
+            v.name.includes('Daniel') ||
+            v.name.includes('Karen') ||
+            v.name.includes('Google')
+        ) || preferredVoices[0];
+    }
+
+    return voices;
+}
+
+function speak(text, options = {}) {
+    return new Promise((resolve, reject) => {
+        if (!state.speechSynthesis) {
+            reject('Speech synthesis not available');
+            return;
+        }
+
+        // 取消之前的语音
+        state.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        // 根据难度设置语速
+        const speedMap = {
+            easy: 0.8,
+            normal: 1.0,
+            hard: 1.2
+        };
+
+        utterance.rate = options.slow ? 0.7 : speedMap[state.settings.difficulty];
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
+        // 设置声音
+        if (state.preferredVoice) {
+            utterance.voice = state.preferredVoice;
+        }
+
+        utterance.onstart = () => {
+            state.isSpeaking = true;
+            document.getElementById('officerAvatar')?.classList.add('active');
+        };
+
+        utterance.onend = () => {
+            state.isSpeaking = false;
+            document.getElementById('officerAvatar')?.classList.remove('active');
+            resolve();
+        };
+
+        utterance.onerror = (event) => {
+            state.isSpeaking = false;
+            document.getElementById('officerAvatar')?.classList.remove('active');
+            reject(event.error);
+        };
+
+        state.speechSynthesis.speak(utterance);
+    });
+}
+
+function playQuestion() {
+    const question = state.currentQuestions[state.currentQuestionIndex];
+    if (!question) return;
+
+    const text = state.settings.randomPhrasing
+        ? getRandomPhrasing(question, state.settings.difficulty)
+        : question.phrasings[0].text;
+
+    // 更新显示的问题文本
+    document.getElementById('questionText').textContent = text;
+
+    speak(text).catch(err => console.error('Speech error:', err));
+}
+
+function playQuestionSlow() {
+    const question = state.currentQuestions[state.currentQuestionIndex];
+    if (!question) return;
+
+    const text = document.getElementById('questionText').textContent;
+    speak(text, { slow: true }).catch(err => console.error('Speech error:', err));
+}
+
+function speakFeedback(isCorrect) {
+    const correctResponses = [
+        "Okay.",
+        "Good.",
+        "Alright.",
+        "Thank you.",
+        "Okay, next question."
+    ];
+
+    const incorrectResponses = [
+        "Can you repeat that?",
+        "One more time?",
+        "I didn't catch that."
+    ];
+
+    const responses = isCorrect ? correctResponses : incorrectResponses;
+    const response = responses[Math.floor(Math.random() * responses.length)];
+
+    return speak(response);
+}
+
+// ==================== 语音识别（语音转文字）====================
+function initSpeechRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        state.speechRecognition = new SpeechRecognition();
+        state.speechRecognition.continuous = false;
+        state.speechRecognition.interimResults = true;
+        state.speechRecognition.lang = 'en-US';
+
+        state.speechRecognition.onstart = () => {
+            state.isListening = true;
+            document.getElementById('micBtn')?.classList.add('listening');
+        };
+
+        state.speechRecognition.onend = () => {
+            state.isListening = false;
+            document.getElementById('micBtn')?.classList.remove('listening');
+        };
+
+        state.speechRecognition.onresult = (event) => {
+            const transcript = Array.from(event.results)
+                .map(result => result[0].transcript)
+                .join('');
+
+            document.getElementById('answerInput').value = transcript;
+        };
+
+        state.speechRecognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            state.isListening = false;
+            document.getElementById('micBtn')?.classList.remove('listening');
+        };
+    } else {
+        console.warn('Speech recognition not supported');
+        // 隐藏麦克风按钮
+        const micBtn = document.getElementById('micBtn');
+        if (micBtn) micBtn.style.display = 'none';
+    }
+}
+
+function toggleMic() {
+    if (!state.speechRecognition) {
+        alert('您的浏览器不支持语音识别功能。请使用Chrome浏览器。\nSpeech recognition is not supported in your browser. Please use Chrome.');
+        return;
+    }
+
+    if (state.isListening) {
+        state.speechRecognition.stop();
+    } else {
+        state.speechRecognition.start();
+    }
+}
+
+// ==================== 事件绑定 ====================
+function bindEvents() {
+    // 模块卡片点击
+    document.querySelectorAll('.module-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const module = this.dataset.module;
+            if (module === 'vocabulary') {
+                showVocabulary();
+            } else {
+                startModule(module);
+            }
+        });
+    });
+
+    // 设置按钮
+    document.querySelectorAll('.setting-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const setting = this.dataset.setting;
+            const value = this.dataset.value;
+
+            // 更新UI
+            this.parentElement.querySelectorAll('.setting-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            // 更新状态
+            state.settings[setting] = value;
+            saveProgress();
+        });
+    });
+
+    // Toggle开关
+    document.getElementById('showChinese')?.addEventListener('change', function() {
+        state.settings.showChinese = this.checked;
+        updateChineseDisplay();
+        saveProgress();
+    });
+
+    document.getElementById('autoNext')?.addEventListener('change', function() {
+        state.settings.autoNext = this.checked;
+        saveProgress();
+    });
+
+    document.getElementById('randomPhrasing')?.addEventListener('change', function() {
+        state.settings.randomPhrasing = this.checked;
+        saveProgress();
+    });
+}
+
+// ==================== 界面导航 ====================
+function showHome() {
+    document.getElementById('homeScreen').style.display = 'block';
+    document.getElementById('interviewScreen').style.display = 'none';
+    document.getElementById('progressScreen').style.display = 'none';
+    document.getElementById('resultsScreen').style.display = 'none';
+    const vocabScreen = document.getElementById('vocabularyScreen');
+    if (vocabScreen) vocabScreen.style.display = 'none';
+
+    // 停止语音
+    if (state.speechSynthesis) {
+        state.speechSynthesis.cancel();
+    }
+}
+
+function showProgress() {
+    document.getElementById('homeScreen').style.display = 'none';
+    document.getElementById('interviewScreen').style.display = 'none';
+    document.getElementById('progressScreen').style.display = 'block';
+    document.getElementById('resultsScreen').style.display = 'none';
+
+    updateProgressDisplay();
+}
+
+function showResults() {
+    document.getElementById('homeScreen').style.display = 'none';
+    document.getElementById('interviewScreen').style.display = 'none';
+    document.getElementById('progressScreen').style.display = 'none';
+    document.getElementById('resultsScreen').style.display = 'block';
+
+    const correct = state.sessionStats.correct;
+    const incorrect = state.sessionStats.incorrect;
+    const total = correct + incorrect;
+    const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+    document.getElementById('correctCount').textContent = correct;
+    document.getElementById('incorrectCount').textContent = incorrect;
+
+    // 根据成绩显示不同的图标和消息
+    const resultsIcon = document.getElementById('resultsIcon');
+    const resultsTitle = document.getElementById('resultsTitle');
+    const resultsSubtitle = document.getElementById('resultsSubtitle');
+
+    if (percentage >= 80) {
+        resultsIcon.textContent = '🎉';
+        resultsTitle.textContent = '太棒了！Excellent!';
+        resultsSubtitle.textContent = `你答对了 ${percentage}% 的问题！继续保持！`;
+    } else if (percentage >= 60) {
+        resultsIcon.textContent = '👍';
+        resultsTitle.textContent = '做得不错！Good job!';
+        resultsSubtitle.textContent = `你答对了 ${percentage}% 的问题。继续练习会更好！`;
+    } else {
+        resultsIcon.textContent = '💪';
+        resultsTitle.textContent = '继续加油！Keep practicing!';
+        resultsSubtitle.textContent = `你答对了 ${percentage}% 的问题。多练习几次就会进步！`;
+    }
+}
+
+// ==================== 练习流程 ====================
+function startModule(module) {
+    state.currentModule = module;
+    let questions = getModuleQuestions(module);
+
+    // 应用筛选
+    questions = getFilteredQuestions(questions);
+
+    if (questions.length === 0) {
+        alert('没有符合筛选条件的题目！\nNo questions match the filter!');
+        return;
+    }
+
+    state.currentQuestions = questions;
+    state.currentQuestionIndex = 0;
+    state.sessionStats = { correct: 0, incorrect: 0 };
+
+    // 切换界面
+    document.getElementById('homeScreen').style.display = 'none';
+    document.getElementById('interviewScreen').style.display = 'block';
+
+    // 更新模块标题
+    const info = moduleInfo[module];
+    document.getElementById('moduleTitle').textContent = info.title;
+
+    // 显示第一个问题
+    showQuestion();
+}
+
+function showQuestion() {
+    const question = state.currentQuestions[state.currentQuestionIndex];
+    if (!question) {
+        showResults();
+        return;
+    }
+
+    // 更新返回按钮状态
+    updateBackButton();
+
+    // 更新进度条
+    const progress = ((state.currentQuestionIndex + 1) / state.currentQuestions.length) * 100;
+    document.getElementById('progressFill').style.width = `${progress}%`;
+    document.getElementById('questionCount').textContent =
+        `${state.currentQuestionIndex + 1} / ${state.currentQuestions.length}`;
+
+    // 获取问题文本
+    const questionText = state.settings.randomPhrasing
+        ? getRandomPhrasing(question, state.settings.difficulty)
+        : question.phrasings[0].text;
+
+    // 显示问题
+    document.getElementById('questionText').textContent = questionText;
+    document.getElementById('questionChinese').textContent = question.chinese;
+
+    // 更新中文显示
+    updateChineseDisplay();
+
+    // 重置答案区域
+    document.getElementById('answerInput').value = '';
+    document.getElementById('answerArea').style.display = 'block';
+    document.getElementById('feedbackArea').classList.remove('visible');
+
+    // 自动播放问题
+    setTimeout(() => {
+        playQuestion();
+    }, 500);
+}
+
+function updateChineseDisplay() {
+    const chineseEl = document.getElementById('questionChinese');
+    if (chineseEl) {
+        if (state.settings.showChinese) {
+            chineseEl.classList.add('visible');
+        } else {
+            chineseEl.classList.remove('visible');
+        }
+    }
+}
+
+function submitAnswer() {
+    const question = state.currentQuestions[state.currentQuestionIndex];
+    const userAnswer = document.getElementById('answerInput').value.trim();
+
+    if (!userAnswer) {
+        // 如果没有输入，提示用户
+        document.getElementById('answerInput').placeholder = '请输入回答 Please type your answer...';
+        document.getElementById('answerInput').focus();
+        return;
+    }
+
+    // 简单的答案检查（主要检查关键词）
+    const isCorrect = checkAnswer(userAnswer, question);
+
+    // 记录到练习记录
+    if (!state.progress.practiced[question.id]) {
+        state.progress.practiced[question.id] = 0;
+    }
+    state.progress.practiced[question.id]++;
+
+    // 更新统计
+    if (isCorrect) {
+        state.sessionStats.correct++;
+    } else {
+        state.sessionStats.incorrect++;
+    }
+
+    // 显示反馈
+    showFeedback(question, isCorrect);
+}
+
+function checkAnswer(userAnswer, question) {
+    const answer = userAnswer.toLowerCase();
+
+    // 检查是否包含正确答案的关键词
+    const correctAnswers = question.answers.map(a => a.toLowerCase());
+
+    // 简单匹配：回答包含 yes/no 或关键词
+    for (const correct of correctAnswers) {
+        // 完全匹配
+        if (answer === correct) return true;
+
+        // Yes/No 问题
+        if (correct.includes('yes') && answer.includes('yes')) return true;
+        if (correct.includes('no') && answer.includes('no') && !answer.includes('yes')) return true;
+
+        // 关键词匹配
+        if (question.keywords) {
+            const hasKeyword = question.keywords.some(kw =>
+                answer.includes(kw.toLowerCase())
+            );
+            if (hasKeyword) return true;
+        }
+    }
+
+    return false;
+}
+
+function showFeedback(question, isCorrect) {
+    // 隐藏答案输入区
+    document.getElementById('answerArea').style.display = 'none';
+
+    // 显示反馈区
+    const feedbackArea = document.getElementById('feedbackArea');
+    feedbackArea.classList.add('visible');
+
+    const feedbackCard = document.getElementById('feedbackCard');
+    const feedbackIcon = document.getElementById('feedbackIcon');
+    const feedbackTitle = document.getElementById('feedbackTitle');
+    const referenceAnswer = document.getElementById('referenceAnswer');
+    const tipText = document.getElementById('tipText');
+    const tipsBox = document.getElementById('tipsBox');
+
+    if (isCorrect) {
+        feedbackCard.className = 'feedback-card correct';
+        feedbackIcon.textContent = '✓';
+        feedbackTitle.textContent = 'Good! 正确！';
+    } else {
+        feedbackCard.className = 'feedback-card incorrect';
+        feedbackIcon.textContent = '✗';
+        feedbackTitle.textContent = 'Review this 复习一下';
+    }
+
+    // 显示参考答案
+    referenceAnswer.innerHTML = `
+        ${question.answers[0]}
+        <button class="mini-audio-btn" onclick="speakText('${question.answers[0].replace(/'/g, "\\'")}')">🔊</button>
+    `;
+
+    // 显示提示
+    if (question.tip) {
+        tipsBox.style.display = 'block';
+        tipText.textContent = question.tip;
+    } else {
+        tipsBox.style.display = 'none';
+    }
+
+    // 播放语音反馈，然后朗读参考答案
+    speakFeedback(isCorrect).then(() => {
+        // 反馈后稍等一下再读答案
+        setTimeout(() => {
+            speak(question.answers[0]);
+        }, 300);
+    }).catch(err => console.log('Feedback speech error:', err));
+}
+
+function markMastery(level) {
+    const question = state.currentQuestions[state.currentQuestionIndex];
+
+    // 从其他级别移除
+    delete state.progress.mastered[question.id];
+    delete state.progress.needsPractice[question.id];
+
+    // 添加到相应级别
+    if (level === 'mastered') {
+        state.progress.mastered[question.id] = true;
+    } else if (level === 'needs-practice') {
+        state.progress.needsPractice[question.id] = true;
+    }
+
+    // 保存进度
+    saveProgress();
+
+    // 进入下一题
+    nextQuestion();
+}
+
+function nextQuestion() {
+    state.currentQuestionIndex++;
+
+    if (state.currentQuestionIndex >= state.currentQuestions.length) {
+        showResults();
+    } else {
+        showQuestion();
+    }
+}
+
+function exitInterview() {
+    if (confirm('确定要退出练习吗？\nAre you sure you want to exit?')) {
+        // 停止语音
+        if (state.speechSynthesis) {
+            state.speechSynthesis.cancel();
+        }
+        showHome();
+    }
+}
+
+// ==================== 进度管理 ====================
+function saveProgress() {
+    const data = {
+        settings: state.settings,
+        progress: state.progress
+    };
+    localStorage.setItem('n400_progress', JSON.stringify(data));
+}
+
+function loadProgress() {
+    const saved = localStorage.getItem('n400_progress');
+    if (saved) {
+        try {
+            const data = JSON.parse(saved);
+            state.settings = { ...state.settings, ...data.settings };
+            state.progress = { ...state.progress, ...data.progress };
+
+            // 更新UI
+            updateSettingsUI();
+        } catch (e) {
+            console.error('Failed to load progress:', e);
+        }
+    }
+}
+
+function updateSettingsUI() {
+    // 更新难度按钮
+    document.querySelectorAll('[data-setting="difficulty"]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.value === state.settings.difficulty);
+    });
+
+    // 更新toggles
+    const showChineseEl = document.getElementById('showChinese');
+    if (showChineseEl) showChineseEl.checked = state.settings.showChinese;
+
+    const autoNextEl = document.getElementById('autoNext');
+    if (autoNextEl) autoNextEl.checked = state.settings.autoNext;
+
+    const randomPhrasingEl = document.getElementById('randomPhrasing');
+    if (randomPhrasingEl) randomPhrasingEl.checked = state.settings.randomPhrasing;
+}
+
+function updateProgressDisplay() {
+    // 计算总体统计
+    const practiced = Object.keys(state.progress.practiced).length;
+    const mastered = Object.keys(state.progress.mastered).length;
+    const needsPractice = Object.keys(state.progress.needsPractice).length;
+
+    document.getElementById('totalPracticed').textContent = practiced;
+    document.getElementById('totalMastered').textContent = mastered;
+    document.getElementById('totalNeedsPractice').textContent = needsPractice;
+
+    // 计算各类别进度
+    const categoryProgress = document.getElementById('categoryProgress');
+    categoryProgress.innerHTML = '';
+
+    const categories = ['warmup', 'part2', 'part3-9', 'part12', 'oath'];
+
+    categories.forEach(cat => {
+        const questions = questionDatabase[cat] || [];
+        const total = questions.length;
+        const masteredCount = questions.filter(q => state.progress.mastered[q.id]).length;
+        const percentage = total > 0 ? Math.round((masteredCount / total) * 100) : 0;
+
+        const item = document.createElement('div');
+        item.className = 'category-item';
+        item.innerHTML = `
+            <span class="category-name">${moduleInfo[cat].title}</span>
+            <div class="category-bar">
+                <div class="category-fill" style="width: ${percentage}%"></div>
+            </div>
+            <span class="category-percent">${masteredCount}/${total}</span>
+        `;
+        categoryProgress.appendChild(item);
+    });
+}
+
+// ==================== 工具函数 ====================
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
+// 键盘快捷键
+document.addEventListener('keydown', function(e) {
+    // 空格键播放问题
+    if (e.code === 'Space' && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        playQuestion();
+    }
+
+    // R键重复播放
+    if (e.code === 'KeyR' && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        playQuestion();
+    }
+
+    // S键慢速播放
+    if (e.code === 'KeyS' && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        playQuestionSlow();
+    }
+});
+
+// ==================== 词汇学习功能 ====================
+let currentVocabCategory = 'all';
+let currentVocabList = [];
+
+function showVocabulary() {
+    document.getElementById('homeScreen').style.display = 'none';
+    document.getElementById('interviewScreen').style.display = 'none';
+    document.getElementById('progressScreen').style.display = 'none';
+    document.getElementById('resultsScreen').style.display = 'none';
+    document.getElementById('vocabularyScreen').style.display = 'block';
+
+    // 加载词汇
+    selectVocabCategory('all');
+}
+
+function selectVocabCategory(category) {
+    currentVocabCategory = category;
+
+    // 更新按钮状态
+    document.querySelectorAll('.vocab-category-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === category);
+    });
+
+    // 清空搜索
+    document.getElementById('vocabSearch').value = '';
+
+    // 加载词汇
+    loadVocabulary();
+}
+
+function loadVocabulary() {
+    if (currentVocabCategory === 'all') {
+        currentVocabList = getAllVocabulary();
+    } else {
+        const categoryData = vocabularyDatabase[currentVocabCategory];
+        if (categoryData) {
+            currentVocabList = categoryData.words.map(w => ({
+                ...w,
+                category: currentVocabCategory,
+                categoryTitle: categoryData.title
+            }));
+        } else {
+            currentVocabList = [];
+        }
+    }
+
+    renderVocabulary(currentVocabList);
+}
+
+function filterVocabulary() {
+    const searchTerm = document.getElementById('vocabSearch').value.toLowerCase().trim();
+
+    if (!searchTerm) {
+        renderVocabulary(currentVocabList);
+        return;
+    }
+
+    const filtered = currentVocabList.filter(word =>
+        word.word.toLowerCase().includes(searchTerm) ||
+        word.chinese.includes(searchTerm) ||
+        word.definition.toLowerCase().includes(searchTerm) ||
+        (word.tip && word.tip.includes(searchTerm))
+    );
+
+    renderVocabulary(filtered);
+}
+
+function renderVocabulary(words) {
+    const container = document.getElementById('vocabList');
+    const countEl = document.getElementById('vocabCount');
+
+    countEl.textContent = `显示 ${words.length} 个词汇 Showing ${words.length} words`;
+
+    if (words.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 40px; color: var(--gray-500);">
+                <p style="font-size: 2rem; margin-bottom: 12px;">🔍</p>
+                <p>没有找到匹配的词汇</p>
+                <p>No matching vocabulary found</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = words.map(word => `
+        <div class="vocab-card">
+            <div class="vocab-card-header">
+                <div>
+                    <div class="vocab-word">${word.word}</div>
+                    <div class="vocab-pronunciation">${word.pronunciation || ''}</div>
+                </div>
+                <button class="vocab-audio-btn" onclick="speakText('${word.word.replace(/'/g, "\\'")}')">
+                    🔊
+                </button>
+            </div>
+            <div class="vocab-chinese">${word.chinese}</div>
+            <div class="vocab-definition">
+                <span>${word.definition}</span>
+                <button class="mini-audio-btn" onclick="speakText(\`${word.definition.replace(/`/g, "'").replace(/'/g, "\\'")}\`)">🔊</button>
+            </div>
+            <div class="vocab-example">
+                <span><strong>例句:</strong> ${word.example}</span>
+                <button class="mini-audio-btn" onclick="speakText(\`${word.example.replace(/`/g, "'").replace(/'/g, "\\'")}\`)">🔊</button>
+            </div>
+            ${word.tip ? `
+                <div class="vocab-tip">
+                    💡 <span>${word.tip}</span>
+                </div>
+            ` : ''}
+        </div>
+    `).join('');
+}
+
+function toggleVocabCard(card) {
+    // 可以添加展开/收起效果
+    card.classList.toggle('expanded');
+}
+
+function speakWord(word) {
+    speakText(word);
+}
+
+// 通用朗读函数
+function speakText(text) {
+    if (state.speechSynthesis) {
+        state.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.9;
+        if (state.preferredVoice) {
+            utterance.voice = state.preferredVoice;
+        }
+        state.speechSynthesis.speak(utterance);
+    }
+}
+
+// 跳过当前问题 - 直接进入下一题
+function skipQuestion() {
+    nextQuestion();
+}
+
+// ==================== 语音选择功能 ====================
+function populateVoiceList() {
+    const voiceSelect = document.getElementById('voiceSelect');
+    if (!voiceSelect) return;
+
+    const voices = speechSynthesis.getVoices();
+    const englishVoices = voices.filter(v => v.lang.startsWith('en'));
+
+    voiceSelect.innerHTML = '';
+
+    if (englishVoices.length === 0) {
+        voiceSelect.innerHTML = '<option value="">无可用语音</option>';
+        return;
+    }
+
+    englishVoices.forEach((voice, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        if (state.preferredVoice && voice.name === state.preferredVoice.name) {
+            option.selected = true;
+        }
+        voiceSelect.appendChild(option);
+    });
+
+    // 存储英语语音列表供后续使用
+    state.englishVoices = englishVoices;
+}
+
+function changeVoice() {
+    const voiceSelect = document.getElementById('voiceSelect');
+    const selectedIndex = voiceSelect.value;
+
+    if (state.englishVoices && state.englishVoices[selectedIndex]) {
+        state.preferredVoice = state.englishVoices[selectedIndex];
+        // 试听新语音
+        speak("Hello, this is the selected voice.");
+    }
+}
+
+// 页面加载后填充语音列表
+if (typeof speechSynthesis !== 'undefined') {
+    speechSynthesis.onvoiceschanged = populateVoiceList;
+    setTimeout(populateVoiceList, 500);
+}
+
+// ==================== 退回上一题功能 ====================
+function goBack() {
+    if (state.currentQuestionIndex > 0) {
+        state.currentQuestionIndex--;
+        showQuestion();
+    }
+}
+
+function updateBackButton() {
+    const backBtn = document.getElementById('backBtn');
+    if (backBtn) {
+        backBtn.disabled = state.currentQuestionIndex === 0;
+    }
+}
+
+// ==================== 题目筛选功能 ====================
+function getFilteredQuestions(questions) {
+    const filter = state.settings.filter || 'all';
+
+    if (filter === 'all') {
+        return questions;
+    } else if (filter === 'needs-practice') {
+        return questions.filter(q => state.progress.needsPractice[q.id]);
+    } else if (filter === 'not-mastered') {
+        return questions.filter(q => !state.progress.mastered[q.id]);
+    }
+
+    return questions;
+}
+
+// ==================== 朗读全部词汇功能 ====================
+let isReadingAll = false;
+let readingIndex = 0;
+
+function toggleReadAll() {
+    if (isReadingAll) {
+        stopReadAll();
+    } else {
+        startReadAll();
+    }
+}
+
+function startReadAll() {
+    if (currentVocabList.length === 0) return;
+
+    isReadingAll = true;
+    readingIndex = 0;
+
+    const btn = document.getElementById('readAllBtn');
+    const text = document.getElementById('readAllText');
+    if (btn) btn.classList.add('playing');
+    if (text) text.textContent = '停止朗读';
+
+    readNextWord();
+}
+
+function stopReadAll() {
+    isReadingAll = false;
+    if (state.speechSynthesis) {
+        state.speechSynthesis.cancel();
+    }
+
+    const btn = document.getElementById('readAllBtn');
+    const text = document.getElementById('readAllText');
+    if (btn) btn.classList.remove('playing');
+    if (text) text.textContent = '朗读全部';
+}
+
+function readNextWord() {
+    if (!isReadingAll || readingIndex >= currentVocabList.length) {
+        stopReadAll();
+        return;
+    }
+
+    const word = currentVocabList[readingIndex];
+
+    // 高亮当前词汇卡片
+    const cards = document.querySelectorAll('.vocab-card');
+    cards.forEach((card, i) => {
+        card.style.border = i === readingIndex ? '2px solid var(--primary)' : '2px solid transparent';
+    });
+
+    // 滚动到当前卡片
+    if (cards[readingIndex]) {
+        cards[readingIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // 朗读：单词 + 定义
+    const textToRead = `${word.word}. ${word.definition}`;
+
+    if (state.speechSynthesis) {
+        state.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(textToRead);
+        utterance.rate = 0.85;
+        if (state.preferredVoice) {
+            utterance.voice = state.preferredVoice;
+        }
+
+        utterance.onend = () => {
+            readingIndex++;
+            if (isReadingAll) {
+                setTimeout(readNextWord, 500); // 间隔0.5秒读下一个
+            }
+        };
+
+        utterance.onerror = () => {
+            readingIndex++;
+            if (isReadingAll) {
+                setTimeout(readNextWord, 500);
+            }
+        };
+
+        state.speechSynthesis.speak(utterance);
+    }
+}
+</script>
+</body>
+</html>
